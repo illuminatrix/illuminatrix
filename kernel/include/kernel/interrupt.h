@@ -17,7 +17,7 @@ void trap35(); void trap36(); void trap37(); void trap38(); void trap39();
 void trap40(); void trap41(); void trap42(); void trap43(); void trap44();
 void trap45(); void trap46(); void trap47(); void trap48(); void trap49();
 void trap50();
-void interrupt_handler(); 
+void interrupt_handler(int);
 
 typedef struct
 {

@@ -1,12 +1,38 @@
-.text
+#define SAVE_ALL \
+    cld; \
+    pushl   %es; \
+    pushl   %ds; \
+    pushl   %eax; \
+    pushl   %ebp; \
+    pushl   %edi; \
+    pushl   %esi; \
+    pushl   %edx; \
+    pushl   %ecx; \
+    pushl   %ebx;
+
+#define RESTORE_ALL \
+    popl    %ebx; \
+    popl    %ecx; \
+    popl    %edx; \
+    popl    %esi; \
+    popl    %edi; \
+    popl    %ebp; \
+    popl    %eax; \
+    popl    %ds; \
+    popl    %es;
+
 #define TRAP(intno)						\
-		.globl trap##intno;				\
+	.globl trap##intno;					\
 	.align 4;							\
 	trap##intno:						\
-		pusha;							\
-		call interrupt_handler;	\
-		popa;							\
+		SAVE_ALL                        \
+		mov $intno, %eax;				\
+		call interrupt_handler;			\
+		RESTORE_ALL						\
 		iret;
+
+.text
+	.extern interrupt_handler;
 
 # Processor exceptiions
 TRAP(0)	

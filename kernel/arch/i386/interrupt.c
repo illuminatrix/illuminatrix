@@ -6,9 +6,9 @@
 static idt_desc_t descriptor_table[_INTERRUPTION_TABLE_LENGTH];
 
 void
-interrupt_handler()
+interrupt_handler(int intno)
 {
-	printf("interrupt called\n");
+	puts("hola interrupt");
 }
 
 static inline void

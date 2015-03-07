@@ -21,4 +21,6 @@ kernel_main(void)
 	int inter = are_interrupts_enabled();
 	if (inter)
 		printf("Interrupts available!\n");
+
+	while(1);
 }
