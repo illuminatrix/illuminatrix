@@ -58,19 +58,18 @@ printf(const char* restrict format, ...)
 			format++;
 			char chr[] = "0123456789";
 			int number = va_arg(parameters, int);
-			int c, d, e, f;
-			e = number;
+			int decr, tmp_num;
+			tmp_num = number;
 			
-			for (d=1;e!=0;d=d*10) {
-				c=e%10;
-			    e=e/10;
+			for (decr = 1; tmp_num != 0; decr = decr * 10) {
+			    tmp_num = tmp_num / 10;
 			}    
     
-			for (d=d/10;d!=0;d=d/10) {
-				putchar(chr[((number/d)%10)]);
+			for (decr = decr / 10; decr != 0; decr = decr / 10) {
+				putchar(chr[((number / decr) % 10)]);
 			}
     
-			if (number==0) {
+			if (number == 0) {
 				putchar('0');
 		    }	  
 		}

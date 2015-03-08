@@ -1,25 +1,4 @@
-#define SAVE_ALL \
-    cld; \
-    pushl   %es; \
-    pushl   %ds; \
-    pushl   %eax; \
-    pushl   %ebp; \
-    pushl   %edi; \
-    pushl   %esi; \
-    pushl   %edx; \
-    pushl   %ecx; \
-    pushl   %ebx;
-
-#define RESTORE_ALL \
-    popl    %ebx; \
-    popl    %ecx; \
-    popl    %edx; \
-    popl    %esi; \
-    popl    %edi; \
-    popl    %ebp; \
-    popl    %eax; \
-    popl    %ds; \
-    popl    %es;
+#include <asm/utils.h>
 
 #define TRAP(intno)						\
 	.globl trap##intno;					\
@@ -27,7 +6,9 @@
 	trap##intno:						\
 		SAVE_ALL                        \
 		mov $intno, %eax;				\
-		call interrupt_handler;			\
+		push %eax;						\
+		call general_interrupt_handler;	\
+		pop %eax;						\
 		RESTORE_ALL						\
 		iret;
 

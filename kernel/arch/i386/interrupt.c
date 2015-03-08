@@ -1,4 +1,5 @@
 #include <kernel/interrupt.h>
+#include <kernel/interrupt_handler.h>
 #include <kernel/port.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -6,19 +7,21 @@
 static idt_desc_t descriptor_table[_INTERRUPTION_TABLE_LENGTH];
 
 void
-interrupt_handler(int intno)
+general_interrupt_handler(int intno)
 {
-	puts("hola interrupt");
+	int ret = call_IDT_handler(intno);
+	if (ret != 0)
+		printf("Error[%d]: %s ", ret, str_IDT_error(ret) );
 }
 
 static inline void
 set_interrupt_descriptor(int intno, void (*f)())
 {
-	descriptor_table[intno].offset_1 = (uint32_t)f;	// base low
+	descriptor_table[intno].offset_1 = (uint32_t)f;
 	descriptor_table[intno].selector = 8;
 	descriptor_table[intno].zero = 0;
-	descriptor_table[intno].type = 0x8F;
-	descriptor_table[intno].offset_2 = (((uint32_t)f) >> 16)&0xFFFF;	// base high
+	descriptor_table[intno].type = _TRAP_GATE;
+	descriptor_table[intno].offset_2 = (((uint32_t)f) >> 16)&0xFFFF;
 }
 
 static inline void
@@ -78,6 +81,13 @@ fill_idt()
 	set_interrupt_descriptor(50, trap50);
 }
 
+static inline void
+wait_out()
+{
+	uint32_t i;
+	for (i = 0; i < 1000; i++);
+}
+
 void
 load_idt()
 {
@@ -94,5 +104,6 @@ load_idt()
 
 	_port_writeb(0x21,0xfd);
 	_port_writeb(0xa1,0xff);
+	
 	asm("sti");
 }
