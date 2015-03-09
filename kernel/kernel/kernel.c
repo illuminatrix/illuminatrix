@@ -9,18 +9,18 @@
 void
 kernel_early(void)
 {
-	terminal_initialize();
-	load_idt();
+    terminal_initialize();
+    load_idt();
 }
 
 void
 kernel_main(void)
 {
-	printf("Hello, kernel World!\n");
+    printf("Hello, kernel World!\n");
 
-	int inter = are_interrupts_enabled();
-	if (inter)
-		printf("Interrupts available!\n");
+    int inter = are_interrupts_enabled();
+    if (inter)
+        printf("Interrupts available!\n");
 
-	while(1);
+    while(1);
 }

@@ -2,25 +2,26 @@
 #define _KERNEL_INTERRUPT_H
 
 ///////////////////////////////////////////////////////////////////
-// -- Common IRQ Table for x86 in Protected Mode
-// IRQ NUMBWE	INTNO	Desctiption
+// -- Common IRQ Table for x86 in Protected Mode --
+//
+// IRQ NUMBWE | INTNO | Desctiption
 // ----------------------------------------------------------------
-// IRQ0			0x08	Timer
-// IRQ1			0x09	Keyboard
-// IRQ2			0x0A	Cascade for 8259A Slave controller
-// IRQ3			0x0B	Serial port 2
-// IRQ4			0x0C	Serial port 1
-// IRQ5			0x0D	AT systems: Parallel Port 2. PS/2 systems: reserved
-// IRQ6			0x0E	Diskette drive
-// IRQ7			0x0F	Parallel Port 1
-// IRQ8/IRQ0	0x70	CMOS Real time clock
-// IRQ9/IRQ1	0x71	CGA vertical retrace
-// IRQ10/IRQ2	0x72	Reserved
-// IRQ11/IRQ3	0x73	Reserved
-// IRQ12/IRQ4	0x74	AT systems: reserved. PS/2: auxiliary device
-// IRQ13/IRQ5	0x75	FPU
-// IRQ14/IRQ6	0x76	Hard disk controller
-// IRQ15/IRQ7	0x77	Reserved
+// IRQ0         0x08    Timer
+// IRQ1         0x09    Keyboard
+// IRQ2         0x0A    Cascade for 8259A Slave controller
+// IRQ3         0x0B    Serial port 2
+// IRQ4         0x0C    Serial port 1
+// IRQ5         0x0D    AT systems: Parallel Port 2. PS/2 systems: reserved
+// IRQ6         0x0E    Diskette drive
+// IRQ7         0x0F    Parallel Port 1
+// IRQ8/IRQ0    0x70    CMOS Real time clock
+// IRQ9/IRQ1    0x71    CGA vertical retrace
+// IRQ10/IRQ2   0x72    Reserved
+// IRQ11/IRQ3   0x73    Reserved
+// IRQ12/IRQ4   0x74    AT systems: reserved. PS/2: auxiliary device
+// IRQ13/IRQ5   0x75    FPU
+// IRQ14/IRQ6   0x76    Hard disk controller
+// IRQ15/IRQ7   0x77    Reserved
 ///////////////////////////////////////////////////////////////////
 
 #include <stdint.h>
@@ -77,11 +78,11 @@ void trap50();
 void general_interrupt_handler(int);
 
 struct idt_desc {
-	uint16_t offset_1;	// base low
-	uint16_t selector;
-	uint8_t zero;
-	uint8_t type; 
-	uint16_t offset_2;	// base high
+    uint16_t offset_1;  // base low
+    uint16_t selector;
+    uint8_t zero;
+    uint8_t type; 
+    uint16_t offset_2;  // base high
 };
 typedef struct idt_desc idt_desc_t;
 
@@ -91,7 +92,7 @@ load_idt();
 static inline void
 enable_idt()
 {
-	asm("sti");
+    asm("sti");
 }
 
 #endif
