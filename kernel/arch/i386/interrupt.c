@@ -11,7 +11,10 @@ general_interrupt_handler(int intno)
 {
 	int ret = call_IDT_handler(intno);
 	if (ret != 0)
-		printf("Error[%d]: %s ", ret, str_IDT_error(ret) );
+		printf("Error[%d]: intno: %d %s\n", ret, intno,str_IDT_error(ret) );
+
+	_port_writeb(PIC_1_CTRL, 0x20);
+	_port_writeb(PIC_2_CTRL, 0x20);
 }
 
 static inline void
@@ -20,7 +23,7 @@ set_interrupt_descriptor(int intno, void (*f)())
 	descriptor_table[intno].offset_1 = (uint32_t)f;
 	descriptor_table[intno].selector = 8;
 	descriptor_table[intno].zero = 0;
-	descriptor_table[intno].type = _TRAP_GATE;
+	descriptor_table[intno].type = _INTERRUPT_GATE;
 	descriptor_table[intno].offset_2 = (((uint32_t)f) >> 16)&0xFFFF;
 }
 
@@ -102,8 +105,9 @@ load_idt()
 	IDTR.base = (uint32_t) descriptor_table;
 	asm volatile ( "lidt %0" : : "m"(IDTR) );
 
-	_port_writeb(0x21,0xfd);
-	_port_writeb(0xa1,0xff);
-	
-	asm("sti");
+	// Enable only keyboard interrupt
+	_port_writeb(PIC_1_DATA, IRQ_MASK(IRQ1));
+	_port_writeb(PIC_2_DATA, IRQ_MASK(NO_IRQ));
+
+	enable_idt();
 }

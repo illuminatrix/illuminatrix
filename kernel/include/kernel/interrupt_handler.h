@@ -3,11 +3,12 @@
 
 typedef void (*IDT_handler_t)(int);
 
-typedef enum {
+enum IDT_error {
 	INTERRUPT_NOT_SUPPORTED = 1,
 	INVALID_INT_NO,
 	HANDLER_PREV_DEFINED
-} IDT_error_t;
+};
+typedef enum IDT_error IDT_error_t;
 
 static char *IDT_error_str[3] = {
 	"Success",
