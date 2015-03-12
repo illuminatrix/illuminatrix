@@ -5,11 +5,13 @@
 #include <kernel/tty.h>
 #include <kernel/port.h>
 #include <kernel/interrupt.h>
+#include <kernel/driver.h>
 
 void
 kernel_early(void)
 {
     terminal_initialize();
+    driver_init();
     load_idt();
 }
 

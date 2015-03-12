@@ -1,4 +1,4 @@
-#include <asm/utils.h>
+#include "utils.h"
 
 #define TRAP(intno)                     \
     .globl trap##intno;                 \
