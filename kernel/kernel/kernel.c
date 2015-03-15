@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include <kernel/tty.h>
-#include <kernel/port.h>
+#include <kernel/io.h>
 #include <kernel/interrupt.h>
 #include <kernel/driver.h>
 
@@ -24,5 +24,5 @@ kernel_main(void)
     if (inter)
         printf("Interrupts available!\n");
 
-    while(1);
+    while(1) putchar(getchar());
 }

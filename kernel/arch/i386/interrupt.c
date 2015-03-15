@@ -1,6 +1,6 @@
 #include <kernel/interrupt.h>
 #include <kernel/interrupt_handler.h>
-#include <kernel/port.h>
+#include <kernel/io.h>
 #include <stdio.h>
 #include <stdint.h>
 
@@ -13,8 +13,8 @@ general_interrupt_handler(int intno)
     if (ret != 0)
         printf("Error[%d]: intno: %d %s\n", ret, intno,str_IDT_error(ret) );
 
-    _port_writeb(PIC_1_CTRL, 0x20);
-    _port_writeb(PIC_2_CTRL, 0x20);
+    _outb(PIC_1_CTRL, 0x20);
+    _outb(PIC_2_CTRL, 0x20);
 }
 
 static inline void
@@ -106,8 +106,8 @@ load_idt()
     asm volatile ( "lidt %0" : : "m"(IDTR) );
 
     // Enable only keyboard interrupt
-    _port_writeb(PIC_1_DATA, IRQ_MASK(IRQ1));
-    _port_writeb(PIC_2_DATA, IRQ_MASK(NO_IRQ));
+    _outb(PIC_1_DATA, IRQ_MASK(IRQ1));
+    _outb(PIC_2_DATA, IRQ_MASK(NO_IRQ));
 
     enable_idt();
 }

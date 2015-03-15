@@ -1,5 +1,5 @@
 #ifndef _KERNEL_DRIVER_H
-#define _KERNEL_DRIVER_h
+#define _KERNEL_DRIVER_H
 
 struct driver {
     const char *name;

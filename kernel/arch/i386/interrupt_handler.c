@@ -13,7 +13,7 @@ int call_IDT_handler(int intno)
 
 int add_IDT_handler(int intno, IDT_handler_t handler)
 {
-    if (intno <= _INTERRUPTION_TABLE_LENGTH || intno < 0)
+    if (intno >= _INTERRUPTION_TABLE_LENGTH || intno < 0)
         return INVALID_INT_NO;
     
     if (IDT_handlers[intno] != 0)
