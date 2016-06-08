@@ -10,7 +10,7 @@
  */
 #define K_BKSP      0x08
 #define K_TAB       0x09
-#define K_ENTR      0x0D
+#define K_ENTR      0x0A
 #define K_ESC       0x1b
 #define K_DEL       0x7f
 
