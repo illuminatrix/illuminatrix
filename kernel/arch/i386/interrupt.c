@@ -105,8 +105,8 @@ load_idt()
     IDTR.base = (uint32_t) descriptor_table;
     asm volatile ( "lidt %0" : : "m"(IDTR) );
 
-    // Enable only keyboard interrupt
-    _outb(PIC_1_DATA, IRQ_MASK(IRQ1));
+    // Enable interrupts for PS2 and Serial bus
+    _outb(PIC_1_DATA, IRQ_MASK(IRQ1 | IRQ3 | IRQ4));
     _outb(PIC_2_DATA, IRQ_MASK(NO_IRQ));
 
     enable_idt();

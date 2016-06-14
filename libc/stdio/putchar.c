@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #if defined(__is_myos_kernel)
-#include <kernel/tty.h>
+#include <kernel/uart.h>
 #endif
 
 int
@@ -9,7 +9,7 @@ putchar(int ic)
 {
 #if defined(__is_myos_kernel)
     char c = (char) ic;
-    terminal_write(&c, sizeof(c));
+    write_serial(c);
 #else
     // TODO: You need to implement a write system call.
 #endif

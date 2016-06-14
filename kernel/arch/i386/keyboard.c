@@ -1,40 +1,12 @@
 #include <kernel/keyboard.h>
+#include <kernel/queue.h>
 #include <stdio.h>
-
-static char char_buffer[_BUFFER_SIZE];
-
-static uint8_t head = 0, tail = 0;
 
 static uint8_t _shift;
 
 static uint8_t _ctrl;
 
 static uint8_t _alt;
-
-#define buffer_next(i)  (i + 1) % _BUFFER_SIZE
-#define buffer_empty()  head == tail
-#define buffer_full()   buffer_next(tail) == head
-
-uint8_t
-buffer_dequeue(char *c)
-{
-    if (buffer_empty())
-        return -1;
-
-    *c = char_buffer[head];
-    head = buffer_next(head);
-    return 0;
-}
-
-void
-buffer_enqueue(char c)
-{
-    if (buffer_full())
-        return;
-    
-    char_buffer[tail] = c;
-    tail = buffer_next(tail);
-}
 
 uint8_t
 non_char(char c, uint8_t released)
@@ -94,9 +66,9 @@ handle_key(uint8_t key_num)
     }
     else if (!non_char(key_map[key_num], 0)) {
         if (_shift)
-            buffer_enqueue(shift_map[key_num]);
+            KEYBOARD_ENQUEUE(shift_map[key_num]);
         else
-            buffer_enqueue(key_map[key_num]);
+            KEYBOARD_ENQUEUE(key_map[key_num]);
     }
     return 0;
 }

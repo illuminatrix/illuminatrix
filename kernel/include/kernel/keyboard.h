@@ -1,9 +1,12 @@
 #ifndef _KERNEL_KEYBOARD_H
 #define _KERNEL_KEYBOARD_H
 
-#define _BUFFER_SIZE 8
-
 #include <stdint.h>
+#include <kernel/queue.h>
+
+#define KEYBOARD_DEQUEUE(c) dequeue(keyboard_buffer, c)
+
+#define KEYBOARD_ENQUEUE(c) enqueue(keyboard_buffer, c)
 
 /*
  * Ascii map
@@ -45,6 +48,8 @@
 #define K_F11       0x9a
 #define K_F12       0x9b
 
+queue_t keyboard_buffer;
+
 static const char key_map[] = {
 	0,      K_ESC,  '1',    '2',    '3',    '4',    '5',    '6',
 	'7',    '8',    '9',    '0',    '-',    '=',    K_BKSP, K_TAB,
@@ -72,10 +77,6 @@ static const char shift_map[] = {
 	K_UP,   K_PGUP, 0,      K_LEFT, 0,      K_RGHT, 0,      K_END,
 	K_DOWN, K_PGDN, K_INS,  K_DEL,  0,      0
 };
-
-uint8_t buffer_dequeue(char*);
-
-void buffer_enqueue(char);
 
 int handle_key(uint8_t);
 

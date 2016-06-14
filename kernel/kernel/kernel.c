@@ -6,6 +6,7 @@
 #include <kernel/io.h>
 #include <kernel/interrupt.h>
 #include <kernel/driver.h>
+#include <kernel/uart.h>
 
 void
 kernel_early(void)
@@ -19,10 +20,10 @@ void
 kernel_main(void)
 {
     printf("Hello, kernel World!\n");
+    init_serial();
 
     int inter = are_interrupts_enabled();
     if (inter)
         printf("Interrupts available!\n");
-
     while(1) putchar(getchar());
 }
