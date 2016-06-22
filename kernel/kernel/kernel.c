@@ -1,28 +1,32 @@
 #include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
 
-#include <kernel/tty.h>
-#include <kernel/io.h>
-#include <kernel/interrupt.h>
-#include <kernel/driver.h>
-
-void
-kernel_early(void)
+#define SERIAL_BASE 0x101f1000
+#define SERIAL_FLAG_REGISTER 0x18
+#define SERIAL_BUFFER_FULL (1 << 5)
+ 
+void putc (char c)
 {
-    terminal_initialize();
-    driver_init();
-    load_idt();
+    /* Wait until the serial buffer is empty */
+    while (*(volatile unsigned long*)(SERIAL_BASE + SERIAL_FLAG_REGISTER) 
+                                                   & (SERIAL_BUFFER_FULL));
+    /* Put our character, c, into the serial buffer */
+    *(volatile unsigned long*)SERIAL_BASE = c;
+
+    /* Print a carriage return if this is a newline, as the cursor's x position will not reset to 0*/
+    if (c == '\n')
+    {
+        putc('\r');
+    }
+}
+ 
+void puts (const char * str)
+{
+    while (*str) putc (*str++);
 }
 
 void
 kernel_main(void)
 {
-    printf("Hello, kernel World!\n");
-
-    int inter = are_interrupts_enabled();
-    if (inter)
-        printf("Interrupts available!\n");
-
-    while(1) putchar(getchar());
+    puts("Hello World\n");
 }

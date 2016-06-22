@@ -28,10 +28,6 @@ LIBK_CPFLAGS:=$(LIBK_CPPFLAGS) $(KERNEL_ARCH_CPPFLAGS)
 
 FREEOBJS:=\
 $(ARCH_FREEOBJS) \
-stdio/printf.o \
-stdio/putchar.o \
-stdio/puts.o \
-stdio/getchar.o \
 stdlib/abort.o \
 string/memcmp.o \
 string/memcpy.o \
