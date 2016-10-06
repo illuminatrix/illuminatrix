@@ -4,7 +4,7 @@
 
 #include <kernel/tty.h>
 #include <kernel/io.h>
-#include <kernel/interrupt.h>
+#include <kernel/cpu_setup.h>
 #include <kernel/driver.h>
 #include <kernel/uart.h>
 
@@ -13,17 +13,17 @@ kernel_early(void)
 {
     terminal_initialize();
     driver_init();
-    load_idt();
+    cpu_init();
 }
 
 void
 kernel_main(void)
 {
-    printf("Hello, kernel World!\n");
     init_serial();
 
     int inter = are_interrupts_enabled();
     if (inter)
         printf("Interrupts available!\n");
+    printf("Welocome to myos\n");
     while(1) putchar(getchar());
 }

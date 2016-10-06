@@ -1,11 +1,13 @@
 #include <kernel/driver.h>
-#include <kernel/interrupt.h>
+#include <kernel/irq.h>
+#include <stdint.h>
 #include <stdio.h>
+#include "../interrupt.h"
 
-#define _SERIAL_INTERRUPT 0x0C
+#define _SERIAL_IRQ 0x0C
 
 static int uart_init();
-void serial_interrupt_handler(int);
+void serial_interrupt_handler(void*);
 
 struct driver uart_drv __driver_entry = {
     "serial/uart", // Name
@@ -16,9 +18,9 @@ int
 uart_init()
 {
     uint8_t error =
-        add_IDT_handler(_SERIAL_INTERRUPT, serial_interrupt_handler);
+        add_IRQ_handler(_SERIAL_IRQ, serial_interrupt_handler);
     if (error) {
-        printf("Error[%d]: %s", error, str_IDT_error(error));
+        printf("Error[%d]: %s", error, str_IRQ_error(error));
         return error;
     }
     
@@ -26,7 +28,7 @@ uart_init()
 }
 
 void
-serial_interrupt_handler(int intno )
+serial_interrupt_handler(void* trap_frame)
 {
-    printf("%d", intno);
+    printf("%d", ((trap_frame_t*)trap_frame)->trapno);
 }

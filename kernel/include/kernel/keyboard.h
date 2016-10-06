@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <kernel/queue.h>
 
-#define KEYBOARD_DEQUEUE(c) dequeue(keyboard_buffer, c)
+#define KEYBOARD_DEQUEUE(c) dequeue(&keyboard_buffer, c)
 
-#define KEYBOARD_ENQUEUE(c) enqueue(keyboard_buffer, c)
+#define KEYBOARD_ENQUEUE(c) enqueue(&keyboard_buffer, c)
 
 /*
  * Ascii map

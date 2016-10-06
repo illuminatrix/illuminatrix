@@ -1,27 +1,27 @@
 #ifndef _KERNEL_INTERRUPT_HANDLER_H
 #define _KERNEL_INTERRUPT_HANDLER_H
 
-typedef void (*IDT_handler_t)(int);
+typedef void (*IRQ_handler_t)(void*);
 
-enum IDT_error {
+enum IRQ_error {
     INTERRUPT_NOT_SUPPORTED = 1,
     INVALID_INT_NO,
     HANDLER_PREV_DEFINED
 };
-typedef enum IDT_error IDT_error_t;
+typedef enum IRQ_error IRQ_error_t;
 
-static char *IDT_error_str[3] = {
+static char *IRQ_error_str[3] = {
     "Success",
     "Interrupt not supported",
     "Invalid interruption number",
     "Interruption handler previously defined"
 };
 
-int call_IDT_handler(int);
+int call_IRQ_handler(int);
 
-int add_IDT_handler(int, IDT_handler_t);
+int add_IRQ_handler(int, IRQ_handler_t);
 
-void rm_IDT_handler(int intno);
+void rm_IRQ_handler(int intno);
 
-char *str_IDT_error(int);
+char *str_IRQ_error(int);
 #endif

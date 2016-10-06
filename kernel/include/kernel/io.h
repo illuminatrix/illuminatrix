@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#define KEYBOARD_PORT_R 0x60
 
 static inline uint8_t
 _inb(uint16_t port)
@@ -26,5 +25,12 @@ static inline int are_interrupts_enabled()
                        "pop %0"
                        : "=g"(flags) );
         return flags & (1 << 9);
+}
+
+static inline void
+wait_out()
+{
+    uint32_t i;
+    for (i = 0; i < 1000; i++);
 }
 #endif
