@@ -126,16 +126,14 @@ struct idt_desc {
     uint16_t offset_1;   // base low
     uint16_t selector;   // interrupt function
     uint8_t zero;        // unused
-    uint8_t type    :4 ; // type of interrupt
-    uint8_t ss      :1 ; // storage segment
-    uint8_t dpl     :2 ; // Descriptor privilege level
+    uint8_t type_attr;   // 4 bits for type of interrupt
+                         // 1 bit for storage segment
+                         // 2 bits for Descriptor privilege level
                          // (kernel=0, device_drivers=1, device_drivers=2, applications=3)
-    uint8_t present :1 ; // 0 for unused interrupts
+                         // 1 bit for 0 for unused interrupts
     uint16_t offset_2;   // base high
-};
+} __attribute__ ((packed));
 typedef struct idt_desc idt_desc_t;
-
-void load_idt();
 
 static inline void
 enable_idt()
