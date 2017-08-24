@@ -1,17 +1,20 @@
 #include <string.h>
 
-#define __PACK_CHUNK_OFFSET(S, AS) ( S << AS )
-#define __PACK_CALC_NUMBER(L, AS)  ( L >> AS )
-#define __PACK_SIZE(AS)            ( __PACK_CHUNK_OFFSET(1, AS) )
-#define __PACK_EDGE_ADDR(P, S, AS) ( (void *)((size_t)P + __PACK_CHUNK_OFFSET(S, AS)) )
-#define __PACK_CHECK_PTR(P, AS)    ( (size_t)P % __PACK_SIZE(AS) == 0 )
+#define __PACK_CHUNK_OFFSET(S, AS)   ( S << AS )
+#define __PACK_CALC_NUMBER(L, AS)    ( L >> AS )
+#define __PACK_SIZE(AS)              ( __PACK_CHUNK_OFFSET(1, AS) )
+#define __PACK_MAX_REMANENT(AS)      ( __PACK_SIZE(AS) - 1 )
+#define __PACK_CALC_REMANENT(L, AS)  ( L & __PACK_MAX_REMANENT(AS) )
+#define __PACK_EDGE_ADDR(P, S, AS)   ( (void *)((size_t)P + __PACK_CHUNK_OFFSET(S, AS)) )
+#define __PACK_CHECK_PTR(P, AS)      ( (size_t)P % __PACK_SIZE(AS) == 0 )
 
-#define PACK_32_SHIFT           2
-#define PACK_32_CHUNK_OFFSET(S) __PACK_CHUNK_OFFSET(S, PACK_32_SHIFT)
-#define PACK_32_CALC_NUMBER(L)  __PACK_CALC_NUMBER(L, PACK_32_SHIFT)
-#define PACK_32_SIZE            __PACK_SIZE(PACK_32_SHIFT)
-#define PACK_32_EDGE_ADDR(P, S) __PACK_EDGE_ADDR(P, S, PACK_32_SHIFT)
-#define PACK_32_CHECK_PTR(P)    __PACK_CHECK_PTR(P, PACK_32_SHIFT)
+#define PACK_32_SHIFT              2
+#define PACK_32_CHUNK_OFFSET(S)   __PACK_CHUNK_OFFSET(S, PACK_32_SHIFT)
+#define PACK_32_CALC_NUMBER(L)    __PACK_CALC_NUMBER(L, PACK_32_SHIFT)
+#define PACK_32_SIZE              __PACK_SIZE(PACK_32_SHIFT)
+#define PACK_32_CALC_REMANENT(L)  __PACK_CALC_REMANENT(L, PACK_32_SHIFT)
+#define PACK_32_EDGE_ADDR(P, S)   __PACK_EDGE_ADDR(P, S, PACK_32_SHIFT)
+#define PACK_32_CHECK_PTR(P)      __PACK_CHECK_PTR(P, PACK_32_SHIFT)
 
 
 //!============================================================================
@@ -37,44 +40,27 @@
 extern void *
 memcpy( void * restrict dst_ptr, const void * restrict src_ptr, size_t len )
 {
-    size_t i = 0;
-    size_t remanent = len % PACK_32_SIZE;
+    size_t chunks = 0;
 
     if ( PACK_32_CHECK_PTR( src_ptr ) && PACK_32_CHECK_PTR( dst_ptr ) )
     {
-        const size_t chunks = PACK_32_CALC_NUMBER( len );
-        int * d = dst_ptr;
-        const int * s = src_ptr;
-
-        for ( ; i < chunks; i++ )
-            d[i] = s[i];
+        chunks = PACK_32_CALC_NUMBER( len );
+        __asm__ __volatile__ ( "\
+            cld; rep; movsd;    \
+            mov %3,%0;          \
+            rep; movsb;"
+            : "+c" ( chunks ), "+S" ( src_ptr ), "+D" ( dst_ptr )
+            : "r" ( PACK_32_CALC_REMANENT( len ) )
+        );
     }
-
-    if ( remanent )
+    else
     {
-        /* This block was created to deal with the remanent */
-        void * from_ptr = NULL;
-        void * to_ptr = NULL;
-
-        if ( i )
-        {
-            /* To retake where we left */
-            from_ptr = PACK_32_EDGE_ADDR( src_ptr, i );
-            to_ptr = PACK_32_EDGE_ADDR( dst_ptr, i );
-        }
-        else
-        {
-            /* When there was not at least one chunk */
-            from_ptr = (void *)(src_ptr);
-            to_ptr = dst_ptr;
-            remanent = len;
-        }
-
-        __asm__ __volatile__ (
-            "cld; rep; movsb"
-            : "+c" ( remanent ), "+S" ( from_ptr ), "+D" ( to_ptr )
+        __asm__ __volatile__ ( "\
+            cld; rep; movsb;"
+            : "+c" ( len ), "+S" ( src_ptr ), "+D" ( dst_ptr )
             :
         );
+
     }
 
     return dst_ptr;
