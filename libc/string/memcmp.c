@@ -1,14 +1,22 @@
 #include <string.h>
 
 int
-memcmp(const void* aptr, const void* bptr, size_t size)
+memcmp( const void * a_ptr, const void * b_ptr, size_t len )
 {
-    const unsigned char* a = (const unsigned char*) aptr;
-    const unsigned char* b = (const unsigned char*) bptr;
-    for ( size_t i = 0; i < size; i++ )
-        if ( a[i] < b[i] )
-            return -1;
-        else if ( b[i] < a[i] )
-            return 1;
-    return 0;
+    int result = 1;
+
+     __asm__ __volatile__ ( "      \
+         cld; repe cmpsb;          \
+         jecxz  2f;                \
+         jle 1f;                   \
+                                   \
+         1:                        \
+             negl (%[RES]);        \
+         2:                        \
+             movl $0, (%[RES]);"
+         : "+c" ( len ), "+S" ( a_ptr ),  "+D" ( b_ptr )
+         :  [RES] "r" ( &result )
+     );
+
+    return result;
 }
