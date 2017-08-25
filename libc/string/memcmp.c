@@ -8,7 +8,7 @@ memcmp( const void * a_ptr, const void * b_ptr, size_t len )
      __asm__ __volatile__ ( "      \
          cld; repe cmpsb;          \
          jecxz  2f;                \
-         jle 1f;                   \
+         jl 1f;                   \
                                    \
          1:                        \
              negl (%[RES]);        \
