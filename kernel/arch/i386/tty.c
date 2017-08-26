@@ -10,6 +10,16 @@ size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
 
+static inline void
+set_scr( char c, uint8_t term_color )
+{
+    uint16_t entry = make_vgaentry( c, term_color );
+    size_t total =  VGA_HEIGHT  * VGA_WIDTH;
+
+    for ( size_t i = 0; i < total; i++ )
+        terminal_buffer[i] = entry;
+}
+
 void
 terminal_initialize(void)
 {
@@ -17,13 +27,8 @@ terminal_initialize(void)
     terminal_column = 0;
     terminal_color = make_color(COLOR_LIGHT_GREY, COLOR_BLACK);
     terminal_buffer = VGA_MEMORY;
-    for ( size_t y = 0; y < VGA_HEIGHT; y++ ) {
-        
-        for ( size_t x = 0; x < VGA_WIDTH; x++ ) {
-            const size_t index = y * VGA_WIDTH + x;
-            terminal_buffer[index] = make_vgaentry(' ', terminal_color);
-        }
-    }
+
+    set_scr( ' ', terminal_color );
 }
 
 void
