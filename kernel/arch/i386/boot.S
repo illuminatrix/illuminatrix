@@ -25,6 +25,11 @@ stack_top:
 _start:
     movl $stack_top, %esp
 
+    # switching to proteted mode
+    mov %cr0, %ecx
+    or $0x01, %ecx
+    mov %ecx, %cr0
+
     # Initialize the core kernel before running the global constructors.
     call kernel_early
 
