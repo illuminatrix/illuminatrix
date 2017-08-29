@@ -45,8 +45,9 @@ fill_idt()
     //    set_interrupt_descriptor(i, trap_table[i], _TRAP_GATE_TYPE);
     //}
     //
-    for (i=IRQ_OFFSET; i < _INTERRUPT_LENGTH + IRQ_OFFSET; i++) {
-        set_interrupt_descriptor(i, intr_table[i], KERNEL_CS, ST_KERN | _INTERRUPT_GATE_TYPE);
+    for (i=0; i < _INTERRUPT_LENGTH; i++) {
+        set_interrupt_descriptor(i + IRQ_OFFSET, intr_table[i],
+			KERNEL_CS, ST_KERN | _INTERRUPT_GATE_TYPE);
     }
 }
 

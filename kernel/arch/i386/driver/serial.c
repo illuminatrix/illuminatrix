@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "../interrupt.h"
 
-#define _SERIAL_IRQ 0x0C
+#define _SERIAL_IRQ 0x04
 
 static int uart_init();
 void serial_interrupt_handler(void*);

@@ -7,7 +7,7 @@
 void
 general_interrupt_handler(trap_frame_t* frame)
 {
-    int ret = call_IRQ_handler(frame->trapno);
+    int ret = call_IRQ_handler((void*)frame);
     if (ret != 0)
         printf("Error[%d]: intno: %d %s\n", ret, frame->trapno,
                 str_IRQ_error(ret) );

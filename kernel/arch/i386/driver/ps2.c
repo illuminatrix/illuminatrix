@@ -4,7 +4,7 @@
 #include <kernel/io.h>
 #include <stdio.h>
 
-#define _PS2_K_IRQ 0x09
+#define _PS2_K_IRQ 0x01
 
 #define _PS2_K_IN_PORT 0x60
 

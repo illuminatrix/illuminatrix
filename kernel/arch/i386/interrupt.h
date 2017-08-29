@@ -6,22 +6,22 @@
 //
 // INTNO | IRQ NUMBER | Master Pin | Slave Pin | Desctiption
 // ----------------------------------------------------------------
-//  0x08   IRQ0         0000 0001    no-pin      Timer
-//  0x09   IRQ1         0000 0010    no-pin      Keyboard
-//  0x0A   IRQ2         0000 0100    no-pin      Cascade for 8259A Slave controller
-//  0x0B   IRQ3         0000 1000    no-pin      Serial port 2
-//  0x0C   IRQ4         0001 0000    no-pin      Serial port 1
-//  0x0D   IRQ5         0010 0000    no-pin      AT systems: Parallel Port 2. PS/2 systems: reserved
-//  0x0E   IRQ6         0100 0000    no-pin      Diskette drive
-//  0x0F   IRQ7         1000 0000    no-pin      Parallel Port 1
-//  0x70   IRQ8/IRQ0    no-pin       0000 0001   CMOS Real time clock
-//  0x71   IRQ9/IRQ1    no-pin       0000 0010   CGA vertical retrace
-//  0x72   IRQ10/IRQ2   no-pin       0000 0100   Reserved
-//  0x73   IRQ11/IRQ3   no-pin       0000 1000   Reserved
-//  0x74   IRQ12/IRQ4   no-pin       0001 0000   AT systems: reserved. PS/2: auxiliary device
-//  0x75   IRQ13/IRQ5   no-pin       0010 0000   FPU
-//  0x76   IRQ14/IRQ6   no-pin       0100 0000   Hard disk controller
-//  0x77   IRQ15/IRQ7   no-pin       1000 0000   Reserved
+//  0x20   IRQ0         0000 0001    no-pin      Timer
+//  0x21   IRQ1         0000 0010    no-pin      Keyboard
+//  0x22   IRQ2         0000 0100    no-pin      Cascade for 8259A Slave controller
+//  0x23   IRQ3         0000 1000    no-pin      Serial port 2
+//  0x24   IRQ4         0001 0000    no-pin      Serial port 1
+//  0x25   IRQ5         0010 0000    no-pin      AT systems: Parallel Port 2. PS/2 systems: reserved
+//  0x26   IRQ6         0100 0000    no-pin      Diskette drive
+//  0x27   IRQ7         1000 0000    no-pin      Parallel Port 1
+//  0x28   IRQ8/IRQ0    no-pin       0000 0001   CMOS Real time clock
+//  0x29   IRQ9/IRQ1    no-pin       0000 0010   CGA vertical retrace
+//  0x2A   IRQ10/IRQ2   no-pin       0000 0100   Reserved
+//  0x2B   IRQ11/IRQ3   no-pin       0000 1000   Reserved
+//  0x2C   IRQ12/IRQ4   no-pin       0001 0000   AT systems: reserved. PS/2: auxiliary device
+//  0x2D   IRQ13/IRQ5   no-pin       0010 0000   FPU
+//  0x2E   IRQ14/IRQ6   no-pin       0100 0000   Hard disk controller
+//  0x2F   IRQ15/IRQ7   no-pin       1000 0000   Reserved
 ///////////////////////////////////////////////////////////////////
 
 #include <stdint.h>
@@ -71,7 +71,7 @@
 
 #define IRQ_MASK(irq) irq ^ 0xFF
 
-#define IRQ_OFFSET 0x08
+#define IRQ_OFFSET 0x20
 
 void trap_0(); void trap_1(); void trap_2(); void trap_3(); void trap_4();
 void trap_5(); void trap_6(); void trap_7(); void trap_8(); void trap_9();

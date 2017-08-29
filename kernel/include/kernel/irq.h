@@ -17,11 +17,11 @@ static char *IRQ_error_str[3] = {
     "Interruption handler previously defined"
 };
 
-int call_IRQ_handler(int);
+int call_IRQ_handler(void *);
 
 int add_IRQ_handler(int, IRQ_handler_t);
 
-void rm_IRQ_handler(int intno);
+void rm_IRQ_handler(int);
 
 char *str_IRQ_error(int);
 #endif
