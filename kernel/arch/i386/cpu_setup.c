@@ -84,8 +84,8 @@ load_idt()
     _outb(PIC_SLAVE_DATA, 0x01);
     // ========================================================
 
-    // Enable interrupts for PS2 and Serial bus
-    _outb(PIC_MASTER_DATA, IRQ_MASK(IRQ1));
+    // Enable interrupt for cascade
+    _outb(PIC_MASTER_DATA, IRQ_MASK(IRQ2));
     _outb(PIC_SLAVE_DATA, IRQ_MASK(NO_IRQ));
 
     enable_idt();

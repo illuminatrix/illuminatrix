@@ -10,7 +10,7 @@ enum IRQ_error {
 };
 typedef enum IRQ_error IRQ_error_t;
 
-static char *IRQ_error_str[3] = {
+static char *IRQ_error_str[] = {
     "Success",
     "Interrupt not supported",
     "Invalid interruption number",

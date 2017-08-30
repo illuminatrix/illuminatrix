@@ -12,8 +12,8 @@ void
 kernel_early(void)
 {
     terminal_initialize();
-    driver_init();
     cpu_init();
+    driver_init();
 }
 
 void

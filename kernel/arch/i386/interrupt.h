@@ -69,7 +69,7 @@
 #define IRQ14 0x40
 #define IRQ15 0x80
 
-#define IRQ_MASK(irq) irq ^ 0xFF
+#define IRQ_MASK(irq) (irq ^ 0xFF)
 
 #define IRQ_OFFSET 0x20
 
