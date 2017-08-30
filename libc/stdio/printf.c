@@ -59,6 +59,12 @@ printf(const char* restrict format, ...)
             char chr[] = "0123456789";
             int number = va_arg(parameters, int);
             int decr, tmp_num;
+
+            if ( number < 0 ) {
+                putchar(0x2D);
+                number*=-1;
+            }
+
             tmp_num = number;
             
             for (decr = 1; tmp_num != 0; decr = decr * 10) {
