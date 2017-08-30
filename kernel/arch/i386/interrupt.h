@@ -72,7 +72,7 @@
 #define IRQ_MASK(irq) (irq ^ 0xFF)
 
 #define IRQ_OFFSET 0x20
-
+#define IRQ_EOI 0x20
 void trap_0(); void trap_1(); void trap_2(); void trap_3(); void trap_4();
 void trap_5(); void trap_6(); void trap_7(); void trap_8(); void trap_9();
 void trap_10(); void trap_11(); void trap_12(); void trap_13(); void trap_14();

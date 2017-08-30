@@ -11,17 +11,17 @@ general_interrupt_handler(trap_frame_t* frame)
     if (ret != 0)
         printf("Error[%d]: intno: %d %s\n", ret, frame->trapno,
                 str_IRQ_error(ret) );
-
-    _outb(PIC_MASTER_CTRL, 0x20);
-    _outb(PIC_SLAVE_CTRL, 0x20);
+    if (frame->trapno & 0x08) {
+        _outb(PIC_SLAVE_CTRL, IRQ_EOI);
+    } else {
+        _outb(PIC_MASTER_CTRL, IRQ_EOI);
+    }
 }
 
 void
 general_trap_handler(trap_frame_t* frame)
 {
     printf("trap #%d\n", frame->trapno);
-    _outb(PIC_MASTER_CTRL, 0x20);
-    _outb(PIC_SLAVE_CTRL, 0x20);
 }
 
 void
