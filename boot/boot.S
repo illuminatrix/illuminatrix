@@ -22,11 +22,11 @@ start:
 	mov $0x1, %eax
 	mov %eax, %cr0
 
-	PRINT_STR $jmp_cs_msg, $10
-	ljmp $0x8, $start32
+	ljmp $0x08, $start32
 
+.code32
 start32:
-	mov $0xB, %ax
+	mov $0x10, %ax
 	mov %ax, %ds
 	mov %ax, %es
 	mov %ax, %ss
