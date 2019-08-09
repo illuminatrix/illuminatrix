@@ -38,12 +38,9 @@ halt:
 
 .p2align 2
 gdt:
-	.word 0, 0
-	.byte 0, 0, 0, 0
-	.word (((0xffffffff) >> 12)&0xffff), ((0x0)&0xffff)
-	.byte (((0x0) >> 16)&0xff), (0x90 | (0xa)), (0xC0 | (((0xffffffff) >> 28) & 0xf)), (((0x0) >> 24) & 0xff)
-	.word (((0xffffffff) >> 12)&0xffff), ((0x0)&0xffff)
-	.byte (((0x0) >> 16)&0xff), (0x90 | (0x2)), (0xC0 | (((0xffffffff) >> 28) & 0xf)), (((0x0) >> 24) & 0xff)
+	.quad 0x0000000000000000 // null descriptor
+	.quad 0x00009a000000ffff // code descriptor type=execute/read
+	.quad 0x000092000000ffff // data descriptor type=read/write
 gdtdesc:
 	.word (gdtdesc - gdt - 1)
 	.long gdt
