@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "kernel.h"
+#include "interrupts.h"
 
 char *message = "hello kernel";
 
@@ -9,4 +10,6 @@ void kernel_main(multiboot_info_t *mem_info_ptr)
     uint8_t i = 0;
     for (i = 0; message[i] != 0; i++)
         t_buffer[i] = (uint16_t)message[i] | (uint16_t) 15 << 8;
+
+    load_idt();
 }
