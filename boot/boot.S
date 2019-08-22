@@ -13,7 +13,6 @@ start:
 	CLEAN
 	RESET_CURSOR
 	PRINT_STR $start_msg, $11
-
 	PRINT_STR $gdt_msg, $11
 	lgdt gdtdesc
 
@@ -31,6 +30,8 @@ start32:
 	mov %ax, %es
 	mov %ax, %ss
 
+        PRINT_STR_PMODE $pmode_hello_msg
+
 	mov $0x8000, %esp // move the esp to a any place
 halt:
 	hlt
@@ -39,8 +40,8 @@ halt:
 .p2align 2
 gdt:
 	.quad 0x0000000000000000 // null descriptor
-	.quad 0x00009a000000ffff // code descriptor type=execute/read
-	.quad 0x000092000000ffff // data descriptor type=read/write
+	.quad 0x00cf9a000000ffff // code descriptor type=execute/read
+	.quad 0x00cf92000000ffff // data descriptor type=read/write
 gdtdesc:
 	.word (gdtdesc - gdt - 1)
 	.long gdt
@@ -53,3 +54,6 @@ protecte_msg:
 	.ascii "enabling protected mode"
 jmp_cs_msg:
 	.ascii "jump to cs"
+pmode_hello_msg:
+        .ascii "Hello from protected mode!"
+        .byte 0x0

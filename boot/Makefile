@@ -9,4 +9,7 @@ file.img: boot.o
 run: file.img
 	qemu-system-i386 -hda file.img
 clean:
-	rm boot.o file.img
+	rm boot.o file.img file.elf file.lst
+debug: boot.o
+	ld -o file.elf -T boot.ld boot.o; objdump -lS file.elf > file.lst
+
