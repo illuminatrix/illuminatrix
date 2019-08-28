@@ -37,3 +37,16 @@
         jmp 1b
 2:
 .endm
+
+.macro LOAD_NSECTOR s
+        mov $0x02, %ah     // function:2 read sectors from disk drive
+        mov \s, %al        // number of sector to read
+        mov $0x00, %dh     // head: 0
+        mov init_dl, %dl   // recall boot drive number
+        mov $0002, %cx     // cylinder:0 sector:2
+        mov  $1f, %bx      // buffer address pointer es:bx
+        int  $0x13         // low level disk services
+        jmp  1f
+        .section .nsector
+1:
+.endm // cf set on error; ah return code; al actual sectors verfied count
