@@ -22,7 +22,7 @@ init_dl: .byte 0
 
 	PRINT_STR $protecte_msg, $23
 	mov %cr0, %eax
-	mov $0x1, %eax
+	or $0x1, %eax
 	mov %eax, %cr0
 
 	ljmp $0x08, $start32
