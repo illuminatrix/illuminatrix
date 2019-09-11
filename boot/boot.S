@@ -15,9 +15,9 @@ init_dl: .byte 0
 	CLEAN
 	RESET_CURSOR
 	PRINT_STR $start_msg, $11
-	PRINT_STR $gdt_msg, $11
 	LOAD_NSECTOR $1
 
+	PRINT_STR $gdt_msg, $11
 	lgdt gdtdesc
 
 	PRINT_STR $protecte_msg, $23
