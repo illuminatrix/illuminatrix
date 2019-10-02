@@ -1,5 +1,7 @@
 .altmacro
 
+.equ LA, 0x1000 // load address for next sector
+
 .macro CLEAN
         mov $0x06, %ah // scrool active page up
         mov $0x7, %bh // attribute 7
@@ -44,9 +46,5 @@
         mov $0x00, %dh     // head: 0
         mov init_dl, %dl   // recall boot drive number
         mov $0002, %cx     // cylinder:0 sector:2
-        mov  $1f, %bx      // buffer address pointer es:bx
         int  $0x13         // low level disk services
-        jmp  1f
-        .section .nsector
-1:
 .endm // cf set on error; ah return code; al actual sectors verfied count

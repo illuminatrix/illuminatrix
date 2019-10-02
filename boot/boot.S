@@ -15,6 +15,10 @@ init_dl: .byte 0
 	CLEAN
 	RESET_CURSOR
 	PRINT_STR $start_msg, $11
+
+        mov $LA, %bx
+        mov %bx, %es
+        xor %bx, %bx
 	LOAD_NSECTOR $1
 
 	PRINT_STR $gdt_msg, $11
@@ -37,9 +41,8 @@ start32:
         PRINT_STR_PMODE $pmode_hello_msg
 
 	mov $0x8000, %esp // move the esp to a any place
-halt:
-	hlt
-	jmp halt
+
+        jmp LA<<4
 
 .p2align 2
 gdt:
@@ -61,3 +64,8 @@ jmp_cs_msg:
 pmode_hello_msg:
         .ascii "Hello from protected mode!"
         .byte 0x0
+
+.section .nsector
+halt:
+	hlt
+	jmp halt
