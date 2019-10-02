@@ -1,5 +1,7 @@
 .altmacro
 
+.equ KERNEL_ADDRESS, 0x10000
+
 .macro CLEAN
         mov $0x06, %ah // scrool active page up
         mov $0x7, %bh // attribute 7
@@ -39,14 +41,13 @@
 .endm
 
 .macro LOAD_NSECTOR s
+        mov $KERNEL_ADDRESS>>4, %bx
+        mov %bx, %es       // this will load 's' sectors into
+        xor %bx, %bx       // KERNEL_ADDRESS (%es*16 + %bx)
         mov $0x02, %ah     // function:2 read sectors from disk drive
         mov \s, %al        // number of sector to read
         mov $0x00, %dh     // head: 0
-        mov init_dl, %dl   // recall boot drive number
+        mov boot_drive, %dl// recall boot drive number
         mov $0002, %cx     // cylinder:0 sector:2
-        mov  $1f, %bx      // buffer address pointer es:bx
         int  $0x13         // low level disk services
-        jmp  1f
-        .section .nsector
-1:
 .endm // cf set on error; ah return code; al actual sectors verfied count

@@ -2,6 +2,7 @@
 
 .code16
 .globl start
+boot_drive:     .byte 0
 start:
 	cli
 	# Set segments on Zero
@@ -9,12 +10,12 @@ start:
 	mov %ax, %ds
 	mov %ax, %es
 	mov %ax, %ss
-	mov %dl, init_dl // save boot drive
-init_dl: .byte 0
+	mov %dl, boot_drive // save boot drive
 
 	CLEAN
 	RESET_CURSOR
 	PRINT_STR $start_msg, $11
+
 	LOAD_NSECTOR $1
 
 	PRINT_STR $gdt_msg, $11
@@ -37,6 +38,8 @@ start32:
         PRINT_STR_PMODE $pmode_hello_msg
 
 	mov $0x8000, %esp // move the esp to a any place
+        call KERNEL_ADDRESS
+
 halt:
 	hlt
 	jmp halt
