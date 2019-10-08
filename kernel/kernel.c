@@ -1,8 +1,9 @@
 #include <stdint.h>
+#include "kernel.h"
 
 char *message = "hello kernel";
 
-void kernel_main()
+void kernel_main(multiboot_info_t *mem_info_ptr)
 {
     uint16_t* t_buffer = 0xb8000;
     uint8_t i = 0;
