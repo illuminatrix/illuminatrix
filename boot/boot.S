@@ -1,4 +1,5 @@
 #include "boot.h"
+#include "print_icon.h"
 
 .code16
 .globl start
@@ -21,6 +22,26 @@ init_dl: .byte 0
 	lgdt gdtdesc
 
 	PRINT_STR $protecte_msg, $23
+
+	# The following sectors (2-13) are loaded in order to print
+	# the illuminatrix icon. The information of the interruptions
+	# and X,Y coordinates are stored in these sectors.
+	# TODO: Obviously this part has to be re-factorized.
+	LOAD_NSECTOR $2
+	LOAD_NSECTOR $3
+	LOAD_NSECTOR $4
+	LOAD_NSECTOR $5
+	LOAD_NSECTOR $6
+	LOAD_NSECTOR $7
+	LOAD_NSECTOR $8
+	LOAD_NSECTOR $9
+	LOAD_NSECTOR $10
+	LOAD_NSECTOR $11
+	LOAD_NSECTOR $12
+	LOAD_NSECTOR $13
+
+	PRINT_ICON
+
 	mov %cr0, %eax
 	or $0x1, %eax
 	mov %eax, %cr0
