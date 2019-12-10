@@ -1,20 +1,32 @@
+#
+#
+CC := /usr/bin/gcc
+AS := /usr/bin/as
+LD := /usr/bin/ld
+OBJDUMP := /usr/bin/objdump
+CFLAGS := -g -std=gnu99 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32
+ASFLAGS := -32
+OBJS := kernel_head.o isrs.o interrupts.o kernel.o
 
-all: kernel.bin
 
-isrs.o:
-	as -32 isrs.S -o isrs.o
-interrupts.o: isrs.o
-	gcc -g -c interrupts.c -o interrupts.o -std=gnu99 -ffreestanding -fno-pie -O0 -Wextra -m32
-kernel_head.o:
-	as -32 kernel.S -o kernel_head.o
-kernel.o: kernel_head.o interrupts.o
-	gcc -g -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -fno-pie -O0 -Wextra -m32
-kernel.bin: kernel.o
-	gcc -T kernel.ld -o kernel.bin -ffreestanding -fno-pie -O0 -nostdlib kernel_head.o kernel.o isrs.o interrupts.o -lgcc -m32
+%.o: %.S
+	@echo "AS $^    ->     $@"
+	@$(AS) $(ASFLAGS) -c -o $@ $^
+
+%.o: %.c
+	@echo "CC $^    ->    $@"
+	@$(CC) $(CFLAGS) -c -o $@ $^
+
+kernel.bin: $(OBJS)
+	@echo "LD $^    ->    $@"
+	@$(LD) -T kernel.ld -melf_i386 -o $@ $^
+
 debug: kernel.bin
-	objdump -lSdx kernel.bin > kernel.lst
+	$(OBJDUMP) -lSdx kernel.bin > kernel.lst
+
 run: kernel.bin
 	qemu-system-i386 -kernel kernel.bin
-clean:
-	rm *.o *.bin *.lst
 
+.PHONY: clean
+clean:
+	rm -f *.o *.bin *.lst
