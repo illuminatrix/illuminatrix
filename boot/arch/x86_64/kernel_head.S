@@ -24,13 +24,14 @@
 	//         ||||^^---- Color font
 	//         ||^^------ Character K
 	//         ^^-------- Character font
-
 _start:
+	mov $stack_top, %esp
 	// Print OK to VGA buffer, Oxb8000 is the start of the adress
 	movl $OK, 0xb8000
 	// Halt and back halt in case of interuptions?
 1:	hlt
 	jmp 1b
+
 
 // Prints `ERR: <al>` and the given error code to screen and hangs.
 // parameter: error code (in ascii) in al
@@ -43,3 +44,16 @@ error:
 	movl $0x4f204f20, 0xb8008
 	mov %al, 0xb800a
 	hlt
+
+.section .bss
+	// The stack on x86 is recommened to be 16-byte aligned.
+	// This is specially required for SSE instructions.
+	// Note that for embedded embedded this could be much stack size.
+	// https://medium.com/@_neerajpal/explained-difference-between-x86-x64-disassembly-49e9678e1ae2
+	.align 16
+	// 16k.
+	.set STACKSIZE, 0x4000
+stack_bottom:
+	// FIXME: .lcomm check difference to use it.
+	.skip STACKSIZE
+stack_top:

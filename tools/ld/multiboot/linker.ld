@@ -31,13 +31,16 @@ SECTIONS
 		*(.text)
 	}
 
+	/* FIXME need to aling to 4K to allow to Identitiy mapping on paging */
+	.bss :
+	{
+	   *(.bss)
+	}
+
 	/* FIXME:
 	 * When jump to  identity map we may face this issue:
 	 * https://github.com/phil-opp/blog_os/issues/126#issuecomment-176907574
 	*/
 
-	/*
-	 * FIXME: Add bss section and more
-	*/
 
 }
