@@ -1,5 +1,12 @@
 // SPDX-License-Identifier: MIT
 
+// Format:
+// I dont know if there is an asmfmt, so for now, this is the format.
+// .section
+// <tab> all goes in the section
+// label:
+// <tab>: all goes in label
+
 .section .text
 	.global _start
 	// Set _start as a function to export to help to linker as this the starting point of the program
@@ -24,3 +31,15 @@ _start:
 	// Halt and back halt in case of interuptions?
 1:	hlt
 	jmp 1b
+
+// Prints `ERR: <al>` and the given error code to screen and hangs.
+// parameter: error code (in ascii) in al
+// Usage:
+//	mov $'1', %al
+//	jmp error
+error:
+	movl $0x4f524f45, 0xb8000
+	movl $0x4f3a4f52, 0xb8004
+	movl $0x4f204f20, 0xb8008
+	mov %al, 0xb800a
+	hlt
