@@ -54,6 +54,5 @@ error:
 	// 16k.
 	.set STACKSIZE, 0x4000
 stack_bottom:
-	// FIXME: .lcomm check difference to use it.
 	.skip STACKSIZE
 stack_top:
