@@ -32,5 +32,8 @@ iso: kernel.bin
 run: iso
 	qemu-system-x86_64 -cdrom "$(BUILD_DIR)/disk.iso"
 
+sections: $(BUILD_DIR)/kernel.bin
+	readelf --sections $(BUILD_DIR)/kernel.bin
+
 clean:
 	rm -rf $(BUILD_DIR)
