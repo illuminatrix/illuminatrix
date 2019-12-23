@@ -32,6 +32,7 @@ SECTIONS
 	}
 
 	/* FIXME need to aling to 4K to allow to Identitiy mapping on paging */
+	/* bss is section is loaded by the multiboot boot loader */
 	.bss :
 	{
 	   *(.bss)
