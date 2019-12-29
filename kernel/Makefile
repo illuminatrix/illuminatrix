@@ -6,7 +6,7 @@ LD := /usr/bin/ld
 OBJDUMP := /usr/bin/objdump
 CFLAGS := -g -std=gnu99 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32
 ASFLAGS := -32
-OBJS := kernel_head.o isrs.o interrupts.o kernel.o
+OBJS := kernel_head.o isrs.o interrupts.o kernel.o mm.o
 
 
 %.o: %.S
