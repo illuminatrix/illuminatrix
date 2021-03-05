@@ -1,6 +1,7 @@
 CFLAGS := -g -std=gnu11 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32 -fno-stack-protector
 FREEOBJS:=\
 stdio/printf.o \
+stdio/vsprintf.o \
 stdio/putchar.o \
 string/memcmp.o \
 string/memcpy.o \
