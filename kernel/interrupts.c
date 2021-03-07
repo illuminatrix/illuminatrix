@@ -8,6 +8,7 @@ struct idt_register idtr;
 
 void load_idt(void)
 {
+    extern void syscall_handler(void);
     extern void isr_0(void);
     extern void isr_1(void);
     extern void isr_10(void);
@@ -39,6 +40,13 @@ void load_idt(void)
         }
     }
 
+    uint32_t syscall_base = (uint32_t)syscall_handler;
+    idt[0x80].type = 0xE;
+    idt[0x80].p = 1;
+    idt[0x80].s = 0;
+    idt[0x80].seg_sel = 0x8;
+    idt[0x80].offset15_0 = (uint16_t)(syscall_base);
+    idt[0x80].offset31_16 = (uint16_t)(syscall_base >> 16);
 
     // prepare idtr
     idtr.limit = (VECTORS * sizeof(struct idt_desc)) - 1;
