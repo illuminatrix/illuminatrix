@@ -59,3 +59,13 @@ ISR                  29
 ISR                  30
 ISR                  31
 
+.global syscall_handler
+syscall_handler:
+	pushl %edx # param 3
+	pushl %ecx # param 2
+	pushl %ebx # param 1
+	call *systemcall_table(,%eax,4) # call systemcall function position %eax moving 4 bytes
+	add 12, %esp # cleaning stack
+	# return is available in %eax
+	iretl
+

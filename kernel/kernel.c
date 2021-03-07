@@ -12,8 +12,11 @@ void welcome()
 
 void kernel_main(multiboot_info_t *mem_info_ptr)
 {
-    welcome();
+    extern void syscall_init(void);
+
+    syscall_init();
     load_idt();
+    welcome();
     init_mm((mmap_entry_t *)mem_info_ptr->mmap_addr,
             mem_info_ptr->mmap_length);
 }
