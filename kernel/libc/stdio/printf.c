@@ -6,8 +6,12 @@
 static void
 print(const char* data, size_t data_length)
 {
-    for ( size_t i = 0; i < data_length; i++ )
-        putchar((int) ((const unsigned char*) data)[i]);
+    long res;
+    __asm__ volatile ("int $0x80"
+	: "=a" (res)
+	: "0" (1),
+	"b" ((long)(data)),
+	"c" ((long)(data_length)));
 }
 
 int
