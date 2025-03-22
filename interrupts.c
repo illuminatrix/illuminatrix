@@ -40,6 +40,24 @@ void load_idt(void)
         }
     }
 
+    extern void irq_0(void);
+    extern void irq_1(void);
+
+    uint32_t irq_base = (uint32_t)irq_0;
+    const uint32_t irq_size_w_error = ((uint32_t)irq_1) - ((uint32_t)irq_0);
+    uint32_t irq_offset = irq_base;
+
+    // setup irqs
+    for(i = 0; i < 16 ; i++) {
+        idt[i + 32].type = 0xE; //32 bit interrupt gate
+        idt[i + 32].p = 1;
+        idt[i + 32].s = 0;
+        idt[i + 32].seg_sel = 0x8; //Segment selector
+        idt[i + 32].offset15_0 = (uint16_t)(irq_offset);
+        idt[i + 32].offset31_16 = (uint16_t)(irq_offset >> 16);
+        irq_offset += irq_size_w_error;
+    }
+
     uint32_t syscall_base = (uint32_t)syscall_handler;
     idt[0x80].type = 0xE;
     idt[0x80].p = 1;

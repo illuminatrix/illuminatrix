@@ -59,6 +59,38 @@ ISR                  29
 ISR                  30
 ISR                  31
 
+.macro IRQ irq_no
+.global irq_\irq_no
+irq_\irq_no:
+        cld
+	pushal
+	mov $(\irq_no), %eax # push interrupt vector number to save state of which interrupt was triggered
+	pushl %eax
+	call irq_handler
+	addl $4, %esp        # discard interrupt vector number
+        cli
+	popal
+        addl $8, %esp;
+	iretl
+.endm
+
+IRQ 0  # Timer interrupt
+IRQ 1  # Keyboard interrupt
+IRQ 2  # Cascade interrupt
+IRQ 3  # COM2 interrupt
+IRQ 4  # COM1 interrupt
+IRQ 5  # LPT2 interrupt
+IRQ 6  # Floppy disk interrupt
+IRQ 7  # LPT1 interrupt
+IRQ 8  # CMOS clock interrupt
+IRQ 9  # Real time clock interrupt
+IRQ 10 # Auxiliary storage interrupt
+IRQ 11 # Reserved
+IRQ 12 # Reserved
+IRQ 13 # Reserved
+IRQ 14 # Reserved
+IRQ 15 # Reserved
+
 .global syscall_handler
 syscall_handler:
 	pushl %edx # param 3
