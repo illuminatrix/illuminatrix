@@ -1,6 +1,8 @@
 #ifndef _KERNEL_INFO_H_
 #define _KERNEL_INFO_H_
 
+#include <stdint.h>
+
 #define FRAME_BUFFER_TYPE_INDEXED 0
 #define FRAME_BUFFER_TYPE_RGB 1
 #define FRAME_BUFFER_TYPE_EGA_TEXT 2

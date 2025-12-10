@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #include "pio.h"
 
 uint8_t in(uint16_t port)

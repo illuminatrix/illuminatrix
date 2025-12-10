@@ -1,5 +1,4 @@
 #include "irq.h"
-#include <stdio.h>
 
 irq_handler_t irq_handlers[32] = {0};
 

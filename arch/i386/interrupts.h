@@ -1,6 +1,8 @@
 #ifndef INTERRUPTS_H
 #define INTERRUPTS_H
 
+#include <stdint.h>
+
 struct idt_register {
     uint16_t limit;
     uint32_t base;

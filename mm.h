@@ -1,6 +1,8 @@
 #ifndef MM_H
 #define MM_H
 
+#include <stdint.h>
+
 #include "kernel.h"
 
 #define FRAME 0x1000 /* 4k */
