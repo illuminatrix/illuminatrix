@@ -1,4 +1,5 @@
 #include "pic.h"
+#include "pio.h"
 
 /* PIC Ports */
 #define PIC1_DATA 0x21  /* Data port for master */
@@ -29,18 +30,6 @@
 #define PIC_CMD_SFNM 0x10
 
 #define PIC_EOI 0x20
-
-static inline uint8_t in(uint16_t port)
-{
-    uint8_t ret;
-    asm volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
-    return ret;
-}
-
-static inline void out(uint16_t port, uint8_t val)
-{
-    asm volatile ("outb %0, %1" : : "a"(val), "dN"(port));
-}
 
 void pic_init()
 {

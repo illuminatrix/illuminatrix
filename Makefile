@@ -7,7 +7,7 @@ ARCH := i386
 OBJDUMP := /usr/bin/objdump
 CFLAGS := -g -std=gnu11 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32 -Ilibc/include
 ASFLAGS := -32
-OBJS := arch/$(ARCH)/kernel_head.o arch/$(ARCH)/isrs.o syscall.o arch/$(ARCH)/interrupts.o kernel.o arch/$(ARCH)/mm.o arch/$(ARCH)/pic.o irq.o
+OBJS := arch/$(ARCH)/kernel_head.o arch/$(ARCH)/isrs.o syscall.o arch/$(ARCH)/interrupts.o kernel.o arch/$(ARCH)/mm.o pic.o arch/$(ARCH)/pio.o irq.o
 QEMU_CMD := qemu-system-i386 -kernel kernel.bin -display curses -serial mon:stdio
 
 
