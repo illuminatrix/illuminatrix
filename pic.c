@@ -1,3 +1,4 @@
+#include "interrupts.h"
 #include "pic.h"
 #include "pio.h"
 
@@ -50,7 +51,7 @@ void pic_init()
     out(PIC1_DATA, PIC_CMD_8086_MODE | PIC_CMD_AUTO_AKW);
     out(PIC2_DATA, PIC_CMD_8086_MODE | PIC_CMD_AUTO_AKW);
 
-    asm volatile ("sti");
+    enable_interrupts();
 }
 
 void pic_enable_irq(uint8_t irq)
