@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "kernel.h"
-#include "interrupts.h"
+#include "interrupt.h"
 #include "mm.h"
 #include "pic.h"
 #include "irq.h"

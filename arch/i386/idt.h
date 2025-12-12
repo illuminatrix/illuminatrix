@@ -1,5 +1,5 @@
-#ifndef INTERRUPTS_H
-#define INTERRUPTS_H
+#ifndef IDT_H
+#define IDT_H
 
 #include <stdint.h>
 
@@ -50,18 +50,5 @@ struct context_w_error {
     uint32_t cs;
     uint32_t eflags;
 };
-
-void load_idt(void);
-
-#define enable_interrupts() \
-    __asm__ volatile("sti \n\t")
-
-#define disable_interrupts() \
-    __asm__ volatile("cli \n\t")
-
-#define load_idtr(idt_ptr) \
-    __asm__ volatile("lidtl %0 \n\t" \
-                     :: "m" (idt_ptr))
-
 
 #endif

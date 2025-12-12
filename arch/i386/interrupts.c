@@ -1,10 +1,25 @@
 #include <stdint.h>
-#include "interrupts.h"
+#include "idt.h"
+#include "interrupt.h"
 
 #define VECTORS 255
 
+#define load_idtr(idt_ptr) \
+    __asm__ volatile("lidtl %0 \n\t" \
+                     :: "m" (idt_ptr))
+
 struct idt_desc idt[VECTORS];
 struct idt_register idtr;
+
+void enable_interrupts(void)
+{
+    __asm__ volatile("sti \n\t");
+}
+
+void disable_interrupts(void)
+{
+    __asm__ volatile("cli \n\t");
+}
 
 void load_idt(void)
 {
