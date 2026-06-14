@@ -5,9 +5,9 @@ AS := as
 LD := ld
 ARCH := i386
 OBJDUMP := /usr/bin/objdump
-CFLAGS := -g -std=gnu11 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32 -Ilibc/include
+CFLAGS := -g -std=gnu11 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32 -Ilibc/include -Ikernel
 ASFLAGS := -32
-OBJS := arch/$(ARCH)/kernel_head.o arch/$(ARCH)/isrs.o syscall.o arch/$(ARCH)/interrupts.o kernel.o arch/$(ARCH)/mm.o pic.o arch/$(ARCH)/pio.o irq.o
+OBJS := arch/$(ARCH)/kernel_head.o arch/$(ARCH)/isrs.o kernel/syscall.o arch/$(ARCH)/interrupts.o kernel/kernel.o arch/$(ARCH)/mm.o kernel/pic.o arch/$(ARCH)/pio.o kernel/irq.o
 QEMU_CMD := qemu-system-i386 -kernel kernel.bin -display curses -serial mon:stdio
 
 
@@ -39,4 +39,4 @@ gdb:
 .PHONY: clean
 clean:
 	cd libc && make clean
-	rm -f *.o arch/$(ARCH)/*o *.bin *.lst
+	rm -f *.o kernel/*.o arch/$(ARCH)/*o *.bin *.lst
