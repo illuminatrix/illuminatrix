@@ -5,24 +5,27 @@ AS := as
 LD := ld
 ARCH := i386
 OBJDUMP := /usr/bin/objdump
-CFLAGS := -g -std=gnu11 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32 -Ilibc/include -Ikernel
+CFLAGS := -g -std=gnu11 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32 -fno-stack-protector
 ASFLAGS := -32
-OBJS := arch/$(ARCH)/kernel_head.o arch/$(ARCH)/isrs.o kernel/syscall.o arch/$(ARCH)/interrupts.o kernel/kernel.o arch/$(ARCH)/mm.o kernel/pic.o arch/$(ARCH)/pio.o kernel/irq.o
 QEMU_CMD := qemu-system-i386 -kernel kernel.bin -display curses -serial mon:stdio
+INCLUDE_DIRS :=
+OBJS := 
 
+include arch/$(ARCH)/Makefile.mk
+include kernel/Makefile.mk
+include libc/Makefile.mk
 
 %.o: %.S
 	@echo "AS $^    ->     $@"
-	@$(AS) $(ASFLAGS) -I arch/$(ARCH)/ -I . -c -o $@ $^
+	@$(AS) $(ASFLAGS) $(INCLUDE_DIRS) -c -o $@ $^
 
 %.o: %.c
 	@echo "CC $^    ->    $@"
-	@$(CC) $(CFLAGS) -I arch/$(ARCH)/ -I . -c -o $@ $^
+	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c -o $@ $^
 
 kernel.bin: $(OBJS)
-	cd libc && make
 	@echo "LD $^    ->    $@"
-	$(LD) -T arch/$(ARCH)/kernel.ld -melf_i386 -o $@ libc/stdio/*.o libc/string/*.o $^
+	$(LD) -T arch/$(ARCH)/kernel.ld -melf_i386 -o $@ $^
 
 debug: kernel.bin
 	$(OBJDUMP) -lSdx kernel.bin > kernel.lst
@@ -38,5 +41,4 @@ gdb:
 
 .PHONY: clean
 clean:
-	cd libc && make clean
-	rm -f *.o kernel/*.o arch/$(ARCH)/*o *.bin *.lst
+	rm -f *.o $(OBJS) *.bin *.lst
