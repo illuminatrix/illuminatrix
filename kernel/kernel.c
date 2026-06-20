@@ -29,8 +29,4 @@ void kernel_main(multiboot_info_t *mem_info_ptr)
     welcome();
     init_mm((mmap_entry_t *)mem_info_ptr->mmap_addr,
             mem_info_ptr->mmap_length);
-    while (1)
-    {
-        asm volatile("hlt");
-    }
 }

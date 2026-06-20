@@ -1,15 +1,13 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <stdint.h>
+
+#include "syscall.h"
 
 int
 putchar(int ic)
 {
     long res;
-    __asm__ volatile ("int $0x80"
-	: "=a" (res)
-	: "0" (1),
-	"b" ((long)(&ic)),
-	"c" ((long)(1)));
+    res = syscall2(1, (long)&ic, 1);
     if (res >= 0)
 	return (int) res;
     return -1;

@@ -2,15 +2,12 @@
 #include <stdio.h>
 #include <stddef.h>
 
+#include "syscall.h"
+
 static void
 print(const char* data, size_t data_length)
 {
-    long res;
-    __asm__ volatile ("int $0x80"
-	: "=a" (res)
-	: "0" (1),
-	"b" ((long)(data)),
-	"c" ((long)(data_length)));
+    syscall2(1, (long)data, data_length);
 }
 
 int
