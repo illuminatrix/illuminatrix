@@ -22,7 +22,7 @@ stack_top:
 _start:
 	mov $stack_top, %esp
 	push %ebx
-	call kernel_main
+	call early_kernel
 1:	hlt
 	jmp 1b
 

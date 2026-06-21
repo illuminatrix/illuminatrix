@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "kernel.h"
 #include "interrupt.h"
 #include "mm.h"
 #include "pic.h"
@@ -16,7 +15,7 @@ void print_tick()
 {
 }
 
-void kernel_main(multiboot_info_t *mem_info_ptr)
+void kernel_main(void)
 {
     syscall_init();
     pic_init();
@@ -26,6 +25,5 @@ void kernel_main(multiboot_info_t *mem_info_ptr)
     irq_request(0, print_tick);
 
     welcome();
-    init_mm((mmap_entry_t *)mem_info_ptr->mmap_addr,
-            mem_info_ptr->mmap_length);
+    init_mm();
 }

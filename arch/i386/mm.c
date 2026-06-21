@@ -1,5 +1,9 @@
 #include <stdint.h>
 #include "mm.h"
+#include "kernel.h"
+
+extern mmap_entry_t *mmap_first_entry;
+extern uint32_t mmap_length;
 
 uint32_t pdir[DIR_SIZE] __attribute__((aligned(FRAME)));
 uint32_t pt[DIR_SIZE]   __attribute__((aligned(FRAME)));
@@ -18,10 +22,8 @@ void setup_identity_paging(void)
     turn_on_paging();
 }
 
-void init_mm(mmap_entry_t *mmap_addr, uint32_t len)
+void init_mm(void)
 {
-    mmap_entry_t *mmap = mmap_addr;
-
     setup_identity_paging();
     __asm__ volatile ("movl $0x1234, 0"); /* remove me */
 }
