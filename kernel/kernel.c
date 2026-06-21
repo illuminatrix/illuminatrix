@@ -4,6 +4,7 @@
 #include "mm.h"
 #include "pic.h"
 #include "irq.h"
+#include "ker_syscall.h"
 
 void welcome()
 {
@@ -17,8 +18,6 @@ void print_tick()
 
 void kernel_main(multiboot_info_t *mem_info_ptr)
 {
-    extern void syscall_init(void);
-
     syscall_init();
     pic_init();
     load_idt();
