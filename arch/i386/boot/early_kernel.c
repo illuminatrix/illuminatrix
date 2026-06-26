@@ -1,4 +1,4 @@
-#include "kernel.h"
+#include "multiboot.h"
 
 extern void kernel_main();
 

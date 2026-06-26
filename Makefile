@@ -4,6 +4,7 @@ CC := gcc
 AS := as
 LD := ld
 ARCH := i386
+BOOT := multiboot
 OBJDUMP := /usr/bin/objdump
 CFLAGS := -g -std=gnu11 -nostdlib -ffreestanding -fno-pie -O0 -Wextra -m32 -fno-stack-protector
 ASFLAGS := -32

@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include "mm.h"
-#include "kernel.h"
 
 extern mmap_entry_t *mmap_first_entry;
 extern uint32_t mmap_length;
