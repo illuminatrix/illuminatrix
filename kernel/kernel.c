@@ -7,8 +7,8 @@
 
 void welcome()
 {
-    printf("Illuminatrix Kernel!");
-
+    printf("Illuminatrix Kernel!\n");
+    printf("Welcome!\n");
 }
 
 void print_tick()
