@@ -97,7 +97,7 @@ syscall_handler:
 	pushl %ecx # param 2
 	pushl %ebx # param 1
 	call *systemcall_table(,%eax,4) # call systemcall function position %eax moving 4 bytes
-	add 12, %esp # cleaning stack
+	add $12, %esp # cleaning stack
 	# return is available in %eax
 	iretl
 
