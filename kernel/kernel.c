@@ -4,11 +4,12 @@
 #include "pic.h"
 #include "irq.h"
 #include "ker_syscall.h"
+#include "boot.h"
 
 void welcome()
 {
-    printf("Illuminatrix Kernel!\n");
-    printf("Welcome!\n");
+    printf("Illuminatrix Kernel!\n\n");
+    printf("CMDLINE: %s\n", boot_get_cmdline());
 }
 
 void print_tick()
