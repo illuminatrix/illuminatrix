@@ -70,6 +70,29 @@ vsprintf(char* str, const char* restrict format, va_list args)
                 str[written++] = '0';
             }
         }
+        else if ( *format == 'p' ) {
+            format++;
+            char *chr = "0123456789ABCDEF";
+            unsigned long number = (unsigned long)va_arg(args, void *);
+            unsigned long decr, tmp_num;
+
+            tmp_num = number;
+
+            str[written++] = '0';
+            str[written++] = 'x';
+
+            for (decr = 1; tmp_num != 0; decr = decr * 16) {
+                tmp_num = tmp_num / 16;
+            }
+
+            for (decr = decr / 16; decr != 0; decr = decr / 16) {
+                str[written++] = chr[((number / decr) % 16)];
+            }
+
+            if (number == 0) {
+                str[written++] = '0';
+            }
+        }
         else {
             goto incomprehensible_conversion;
         }
