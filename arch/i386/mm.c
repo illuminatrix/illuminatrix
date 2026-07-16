@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "mm.h"
+#include "boot.h"
 
 extern mmap_entry_t *mmap_first_entry;
 extern uint32_t mmap_length;
@@ -24,6 +25,7 @@ void setup_identity_paging(void)
 void init_mm(void)
 {
     setup_identity_paging();
+    boot_enable_empty_memory();
     __asm__ volatile ("movl $0x1234, 0"); /* remove me */
 }
 
