@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdint.h>
 
 int
 vsprintf(char* str, const char* restrict format, va_list args)
@@ -32,6 +33,18 @@ vsprintf(char* str, const char* restrict format, va_list args)
             rejected_bad_specifier = true;
             format = format_begun_at;
             goto copy_str;
+        }
+
+        char pad_char = ' ';
+        if ( *format == '0' ) {
+            pad_char = '0';
+            format++;
+        }
+
+        int width = 0;
+        while (*format >= '0' && *format <= '9') {
+            width = (width * 10) + (*format - '0');
+            format++;
         }
 
         if ( *format == 'c' ) {
@@ -70,28 +83,41 @@ vsprintf(char* str, const char* restrict format, va_list args)
                 str[written++] = '0';
             }
         }
-        else if ( *format == 'p' ) {
-            format++;
+        else if ( *format == 'x' || *format == 'p' ) {
             char *chr = "0123456789ABCDEF";
-            unsigned long number = (unsigned long)va_arg(args, void *);
-            unsigned long decr, tmp_num;
+            uint32_t number = va_arg(args, uint32_t);
 
-            tmp_num = number;
-
-            str[written++] = '0';
-            str[written++] = 'x';
-
-            for (decr = 1; tmp_num != 0; decr = decr * 16) {
-                tmp_num = tmp_num / 16;
-            }
-
-            for (decr = decr / 16; decr != 0; decr = decr / 16) {
-                str[written++] = chr[((number / decr) % 16)];
-            }
+            char tmp_buf[10];
+            int tmp_len = 0;
 
             if (number == 0) {
-                str[written++] = '0';
+                tmp_buf[tmp_len++] = '0';
+            } else {
+                int shift = 28;
+
+                while (shift >= 0 && ((number >> shift) & 0xF) == 0)
+                    shift -= 4;
+
+                while (shift >= 0) {
+                    tmp_buf[tmp_len++] = chr[(number >> shift) & 0xF];
+                    shift -= 4;
+                }
             }
+
+            if (*format == 'p') {
+                str[written++] = '0';
+                str[written++] = 'x';
+            }
+
+            int pad_count = width - tmp_len;
+            while (pad_count > 0 ) {
+                str[written++] = pad_char;
+                pad_count--;
+            }
+
+            for (int i = 0; i < tmp_len; i++)
+                str[written++] = tmp_buf[i];
+            format++;
         }
         else {
             goto incomprehensible_conversion;
