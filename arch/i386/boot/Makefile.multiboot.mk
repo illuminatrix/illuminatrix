@@ -1,4 +1,7 @@
-CURRENT_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+BOOTLOADER_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-OBJS += $(CURRENT_DIR)multiboot_start.o
-OBJS += $(CURRENT_DIR)multiboot.o
+BOOTLOADER_OBJS += $(BOOTLOADER_DIR)multiboot_start.o
+BOOTLOADER_OBJS += $(BOOTLOADER_DIR)multiboot.o
+
+OBJS += $(BOOTLOADER_OBJS)
+

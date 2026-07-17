@@ -12,9 +12,9 @@ QEMU_CMD := qemu-system-i386 -kernel kernel.bin -display curses -serial mon:stdi
 INCLUDE_DIRS :=
 OBJS := 
 
-include arch/$(ARCH)/Makefile.mk
 include kernel/Makefile.mk
 include libc/Makefile.mk
+include arch/$(ARCH)/Makefile.mk
 
 %.o: %.S
 	@echo "AS $^    ->     $@"
@@ -24,9 +24,7 @@ include libc/Makefile.mk
 	@echo "CC $^    ->    $@"
 	@$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c -o $@ $^
 
-kernel.bin: $(OBJS)
-	@echo "LD $^    ->    $@"
-	$(LD) -T arch/$(ARCH)/kernel.ld -melf_i386 -o $@ $^
+all: kernel.bin
 
 debug: kernel.bin
 	$(OBJDUMP) -lSdx kernel.bin > kernel.lst

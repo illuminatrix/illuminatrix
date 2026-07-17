@@ -1,8 +1,10 @@
-CURRENT_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+KERNEL_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-OBJS += $(CURRENT_DIR)/ker_syscall.o
-OBJS += $(CURRENT_DIR)/kernel.o
-OBJS += $(CURRENT_DIR)/pic.o
-OBJS += $(CURRENT_DIR)/irq.o
+KERNEL_OBJS += $(KERNEL_DIR)ker_syscall.o
+KERNEL_OBJS += $(KERNEL_DIR)kernel.o
+KERNEL_OBJS += $(KERNEL_DIR)pic.o
+KERNEL_OBJS += $(KERNEL_DIR)irq.o
 
-INCLUDE_DIRS += -I$(CURRENT_DIR)
+INCLUDE_DIRS += -I$(KERNEL_DIR)
+
+OBJS += $(KERNEL_OBJS)

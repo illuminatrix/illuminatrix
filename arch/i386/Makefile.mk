@@ -1,10 +1,16 @@
-CURRENT_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+ARCH_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-OBJS += $(CURRENT_DIR)isrs.o
-OBJS += $(CURRENT_DIR)interrupts.o
-OBJS += $(CURRENT_DIR)mm.o
-OBJS += $(CURRENT_DIR)pio.o
+ARCH_OBJS += $(ARCH_DIR)isrs.o
+ARCH_OBJS += $(ARCH_DIR)interrupts.o
+ARCH_OBJS += $(ARCH_DIR)mm.o
+ARCH_OBJS += $(ARCH_DIR)pio.o
 
-INCLUDE_DIRS += -I$(CURRENT_DIR)
+INCLUDE_DIRS += -I$(ARCH_DIR)
 
-include $(CURRENT_DIR)boot/Makefile.$(BOOT).mk
+include $(ARCH_DIR)boot/Makefile.$(BOOT).mk
+
+OBJS += $(ARCH_OBJS)
+
+kernel.bin: $(OBJS)
+	@echo "LD $^    ->    $@"
+	$(LD) -T $(ARCH_DIR)kernel.ld -melf_i386 -o $@ $^

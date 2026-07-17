@@ -1,29 +1,31 @@
-CURRENT_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+LIBC_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-OBJS += $(CURRENT_DIR)$(ARCH)/syscall.o
+LIBC_OBJS += $(LIBC_DIR)$(ARCH)/syscall.o
 
-OBJS += $(CURRENT_DIR)stdio/printf.o
-OBJS += $(CURRENT_DIR)stdio/vsprintf.o
-OBJS += $(CURRENT_DIR)stdio/putchar.o
-OBJS += $(CURRENT_DIR)string/memcpy.o
-OBJS += $(CURRENT_DIR)string/memset.o
+LIBC_OBJS += $(LIBC_DIR)stdio/printf.o
+LIBC_OBJS += $(LIBC_DIR)stdio/vsprintf.o
+LIBC_OBJS += $(LIBC_DIR)stdio/putchar.o
+LIBC_OBJS += $(LIBC_DIR)string/memcpy.o
+LIBC_OBJS += $(LIBC_DIR)string/memset.o
 
-ifneq (,$(wildcard $(CURRENT_DIR)$(ARCH)/string/memcmp.c))
-OBJS += $(CURRENT_DIR)$(ARCH)/string/memcmp.o
+ifneq (,$(wildcard $(LIBC_DIR)$(ARCH)/string/memcmp.c))
+LIBC_OBJS += $(LIBC_DIR)$(ARCH)/string/memcmp.o
 else
-OBJS += $(CURRENT_DIR)string/memcmp.o
+LIBC_OBJS += $(LIBC_DIR)string/memcmp.o
 endif
 
-ifneq (,$(wildcard $(CURRENT_DIR)$(ARCH)/string/memmove.c))
-OBJS += $(CURRENT_DIR)$(ARCH)/string/memmove.o
+ifneq (,$(wildcard $(LIBC_DIR)$(ARCH)/string/memmove.c))
+LIBC_OBJS += $(LIBC_DIR)$(ARCH)/string/memmove.o
 else
-OBJS += $(CURRENT_DIR)string/memmove.o
+LIBC_OBJS += $(LIBC_DIR)string/memmove.o
 endif
 
-ifneq (,$(wildcard $(CURRENT_DIR)$(ARCH)/string/strlen.c))
-OBJS += $(CURRENT_DIR)$(ARCH)/string/strlen.o
+ifneq (,$(wildcard $(LIBC_DIR)$(ARCH)/string/strlen.c))
+LIBC_OBJS += $(LIBC_DIR)$(ARCH)/string/strlen.o
 else
-OBJS += $(CURRENT_DIR)string/strlen.o
+LIBC_OBJS += $(LIBC_DIR)string/strlen.o
 endif
 
-INCLUDE_DIRS += -I$(CURRENT_DIR)
+INCLUDE_DIRS += -I$(LIBC_DIR)
+
+OBJS += $(LIBC_OBJS)
