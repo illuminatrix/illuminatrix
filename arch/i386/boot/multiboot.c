@@ -21,12 +21,12 @@ char *boot_get_cmdline(void)
 static char *boot_get_memory_block_type_name(uint32_t type)
 {
     switch (type) {
-        case 1:  return "AVAILABLE";
-        case 2:  return "RESERVED";
-        case 3:  return "ACPI_RECLAIMABLE";
-        case 4:  return "ACPI_NVS";
-        case 5:  return "BAD_MEMORY";
-        default: return "UNKNOWN";
+        case MMAP_MEMORY_AVAILABLE      :  return "AVAILABLE";
+        case MMAP_MEMORY_RESERVED       :  return "RESERVED";
+        case MMAP_MEMORY_ACPI_RECAIMABLE:  return "ACPI_RECLAIMABLE";
+        case MMAP_MEMORY_NVS            :  return "ACPI_NVS";
+        case MMAP_MEMORY_BADRAM         :  return "BAD_MEMORY";
+        default                         : return "UNKNOWN";
     }
 }
 
@@ -34,7 +34,7 @@ void boot_enable_empty_memory(void)
 {
     mmap_entry_t *mmap = (mmap_entry_t*)mem_info->mmap_addr;
 
-    printf("\nMEMORY MAPPING:\n");
+    printf("\nPHISICAL MEMORY MAPPING:\n");
     while ((uint32_t)mmap < mem_info->mmap_addr + mem_info->mmap_length) {
         uint32_t start_hi   = mmap->addr >> 32;
         uint32_t start_lo   = mmap->addr & 0xFFFFFFFF;
