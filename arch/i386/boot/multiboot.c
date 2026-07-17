@@ -5,6 +5,9 @@
 
 extern void kernel_main();
 
+extern uint32_t __kernel_start;
+extern uint32_t __kernel_end;
+
 multiboot_info_t *mem_info;
 
 void early_kernel(multiboot_info_t *mem_info_ptr)
@@ -51,5 +54,12 @@ void boot_enable_empty_memory(void)
 
         mmap = (mmap_entry_t *) ((uint32_t)mmap + mmap->size + sizeof(mmap->size));
     }
+
+    printf("\nKERNEL MEMORY INFORMATION:\n");
+    printf("Start: 0x%08x - End: 0x%08x | Size: 0x%08x\n",
+            &__kernel_start,
+            &__kernel_end,
+            &__kernel_end - &__kernel_start);
+
     printf("\n");
 }
