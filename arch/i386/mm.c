@@ -1,13 +1,17 @@
 #include <stdint.h>
+#include <string.h>
 #include "mm.h"
 #include "pmm.h"
 #include "boot.h"
 
+#define PAGE_PRESENT    0x1
+#define PAGE_RW         0x2
+
 extern mmap_entry_t *mmap_first_entry;
 extern uint32_t mmap_length;
 
-uint32_t pdir[DIR_SIZE] __attribute__((aligned(FRAME)));
-uint32_t pt[DIR_SIZE]   __attribute__((aligned(FRAME)));
+uint32_t *pdir;
+uint32_t *pt;
 
 uint32_t frame_bitmap[BITMAP_SIZE];
 
@@ -15,20 +19,25 @@ void setup_identity_paging(void)
 {
     uint32_t i;
 
-    /* set first pte's to first directory */
-    pdir[0] = ((uint32_t) pt) | 0x3;  /* present | r/w | supervisor bits */
+    pdir = (uint32_t*)pmm_frame_alloc();
+    memset(pdir, 0, FRAME_SIZE);
 
-    /* fill DIR_SIZE page tables */
-    for(i = 0; i < DIR_SIZE; i++)
-        pt[i] = (i * FRAME) | 0x3; /* present | supervisor bits */
+    pt = (uint32_t*)pmm_frame_alloc();
+    memset(pt, 0, FRAME_SIZE);
 
-    turn_on_paging();
+    for (uint32_t i = 0; i < 1024; i++) {
+        uint32_t paddr = i * FRAME_SIZE;
+        pt[i] = paddr | PAGE_PRESENT | PAGE_RW;
+    }
+
+    pdir[0] = (uint32_t)pt | PAGE_PRESENT | PAGE_RW;
 }
 
 void init_mm(void)
 {
-    setup_identity_paging();
     boot_enable_empty_memory();
+    setup_identity_paging();
+    turn_on_paging();
     __asm__ volatile ("movl $0x1234, 0"); /* remove me */
 }
 

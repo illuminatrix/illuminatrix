@@ -74,9 +74,8 @@ void boot_enable_empty_memory(void)
             &__kernel_end,
             &__kernel_end - &__kernel_start);
 
-    uint32_t frame_kernel_start = (uint32_t)&__kernel_start / FRAME_SIZE;
     uint32_t frame_kernel_end = ((uint32_t)&__kernel_end + FRAME_SIZE - 1) / FRAME_SIZE;
-    for (uint32_t i = frame_kernel_start; i < frame_kernel_end; i++)
+    for (uint32_t i = 0; i < frame_kernel_end; i++)
             BITMAP_SET(i);
 
     printf("\n");
