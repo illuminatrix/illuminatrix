@@ -42,3 +42,27 @@ void turn_on_paging(void)
                       :: "p" (pdir)
                       : "ax");
 }
+
+void *pmm_frame_alloc(void)
+{
+    for (uint32_t i = 0; i < BITMAP_SIZE; i++) {
+        if (frame_bitmap[i] == 0xFFFFFFFF)
+            continue;
+
+        for (int j = 0; j < 32; j++) {
+            uint32_t index = (i * 32) + j;
+            if (!BITMAP_TEST(index)) {
+                BITMAP_SET(index);
+                return (void *)(index * FRAME_SIZE);
+            }
+        }
+    }
+    return 0;
+}
+
+void pmm_frame_free(void *addr)
+{
+    uint32_t frame = (uint32_t)addr / FRAME_SIZE;
+    if (frame < TOTAL_FRAMES)
+        BITMAP_CLEAR(frame);
+}
