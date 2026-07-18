@@ -1,7 +1,9 @@
 #include "boot.h"
 #include <stdio.h>
+#include <string.h>
 #include "multiboot.h"
 #include "mm.h"
+#include "pmm.h"
 
 extern void kernel_main();
 
@@ -37,6 +39,8 @@ void boot_enable_empty_memory(void)
 {
     mmap_entry_t *mmap = (mmap_entry_t*)mem_info->mmap_addr;
 
+    memset(frame_bitmap, 0xFF, BITMAP_SIZE * sizeof(uint32_t));
+
     printf("\nPHISICAL MEMORY MAPPING:\n");
     while ((uint32_t)mmap < mem_info->mmap_addr + mem_info->mmap_length) {
         uint32_t start_hi   = mmap->addr >> 32;
@@ -52,6 +56,15 @@ void boot_enable_empty_memory(void)
                 len_hi, len_lo,
                 boot_get_memory_block_type_name(mmap->type));
 
+        if (mmap->type == MMAP_MEMORY_AVAILABLE) {
+            uint32_t frame_start = (uint32_t)(mmap->addr / FRAME_SIZE);
+            uint32_t frame_end = (uint32_t)((mmap->addr + mmap->len) / FRAME_SIZE);
+            if (frame_end > BITMAP_SIZE)
+                    frame_end = BITMAP_SIZE;
+            for (uint32_t i = frame_start; i < frame_end; i++)
+                    BITMAP_CLEAR(i);
+        }
+
         mmap = (mmap_entry_t *) ((uint32_t)mmap + mmap->size + sizeof(mmap->size));
     }
 
@@ -60,6 +73,11 @@ void boot_enable_empty_memory(void)
             &__kernel_start,
             &__kernel_end,
             &__kernel_end - &__kernel_start);
+
+    uint32_t frame_kernel_start = (uint32_t)&__kernel_start / FRAME_SIZE;
+    uint32_t frame_kernel_end = ((uint32_t)&__kernel_end + FRAME_SIZE - 1) / FRAME_SIZE;
+    for (uint32_t i = frame_kernel_start; i < frame_kernel_end; i++)
+            BITMAP_SET(i);
 
     printf("\n");
 }

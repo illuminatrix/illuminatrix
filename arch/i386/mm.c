@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "mm.h"
+#include "pmm.h"
 #include "boot.h"
 
 extern mmap_entry_t *mmap_first_entry;
@@ -7,6 +8,8 @@ extern uint32_t mmap_length;
 
 uint32_t pdir[DIR_SIZE] __attribute__((aligned(FRAME)));
 uint32_t pt[DIR_SIZE]   __attribute__((aligned(FRAME)));
+
+uint32_t frame_bitmap[BITMAP_SIZE];
 
 void setup_identity_paging(void)
 {
