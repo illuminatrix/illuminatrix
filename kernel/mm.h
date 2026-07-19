@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #define FRAME 0x1000 /* 4k */
-#define DIR_SIZE 1<<10 /* 0x400 or 1024 entries */
+#define PAGE_ENTRY_SIZE 1<<10 /* 0x400 or 1024 entries */
 
 typedef struct mmap_entry mmap_entry_t;
 

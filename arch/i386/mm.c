@@ -7,9 +7,6 @@
 #define PAGE_PRESENT    0x1
 #define PAGE_RW         0x2
 
-extern mmap_entry_t *mmap_first_entry;
-extern uint32_t mmap_length;
-
 uint32_t *pdir;
 uint32_t *pt;
 
@@ -25,7 +22,7 @@ void setup_identity_paging(void)
     pt = (uint32_t*)pmm_frame_alloc();
     memset(pt, 0, FRAME_SIZE);
 
-    for (uint32_t i = 0; i < 1024; i++) {
+    for (uint32_t i = 0; i < PAGE_ENTRY_SIZE; i++) {
         uint32_t paddr = i * FRAME_SIZE;
         pt[i] = paddr | PAGE_PRESENT | PAGE_RW;
     }
@@ -58,8 +55,8 @@ void *pmm_frame_alloc(void)
         if (frame_bitmap[i] == 0xFFFFFFFF)
             continue;
 
-        for (int j = 0; j < 32; j++) {
-            uint32_t index = (i * 32) + j;
+        for (int j = 0; j < BITMAP_ENTRY_BITS; j++) {
+            uint32_t index = (i * BITMAP_ENTRY_BITS) + j;
             if (!BITMAP_TEST(index)) {
                 BITMAP_SET(index);
                 return (void *)(index * FRAME_SIZE);
