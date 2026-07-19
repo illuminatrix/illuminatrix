@@ -7,6 +7,10 @@
 #define PAGE_PRESENT    0x1
 #define PAGE_RW         0x2
 
+// RECURSIVE_PD_VIRTUAL is the address where pdir was mapped
+#define RECURSIVE_PD_VIRTUAL 0xFFFFF000
+#define RECURSIVE_PT_BASE 0xFFC00000
+
 uint32_t *pdir;
 uint32_t *pt;
 
@@ -28,6 +32,9 @@ void setup_identity_paging(void)
     }
 
     pdir[0] = (uint32_t)pt | PAGE_PRESENT | PAGE_RW;
+
+    // Recursive paging to be able to add page tables through virtual address
+    pdir[1023] = (uint32_t)pdir | PAGE_PRESENT | PAGE_RW;
 }
 
 void init_mm(void)
@@ -71,4 +78,43 @@ void pmm_frame_free(void *addr)
     uint32_t frame = (uint32_t)addr / FRAME_SIZE;
     if (frame < TOTAL_FRAMES)
         BITMAP_CLEAR(frame);
+}
+
+void mm_map_page(uint32_t va, uint32_t pa, uint32_t flags)
+{
+    uint32_t pd_index = va >> 22;
+    uint32_t pt_index = (va >> 12) & 0x03FF;
+
+    uint32_t *pd = (uint32_t *)RECURSIVE_PD_VIRTUAL;
+
+    if (!(pd[pd_index] & PAGE_PRESENT)) {
+        uint32_t new_table_physical = (uint32_t)pmm_frame_alloc();
+        pd[pd_index] = new_table_physical | PAGE_PRESENT | PAGE_RW;
+        uint32_t *new_pt_virtual = (uint32_t *)(RECURSIVE_PT_BASE + (pd_index * FRAME_SIZE));
+
+        __asm__ volatile("invlpg (%0)" :: "r"((uint32_t)new_pt_virtual) : "memory");
+        memset(new_pt_virtual, 0, FRAME_SIZE);
+    }
+
+    uint32_t *pt = (uint32_t *)(RECURSIVE_PT_BASE + (pd_index * FRAME_SIZE));
+
+    pt[pt_index] = (pa & ~0xFFF) | flags;
+
+    __asm__ volatile("invlpg (%0)" :: "r"(va) : "memory");
+}
+
+void mm_unmap_page(uint32_t va)
+{
+    uint32_t pd_index = va >> 22;
+    uint32_t pt_index = (va >> 12) & 0x03FF;
+
+    uint32_t *pd = (uint32_t *)RECURSIVE_PD_VIRTUAL;
+
+    if (!(pd[pd_index] & PAGE_PRESENT))
+        return;
+
+    uint32_t *pt= (uint32_t *)(RECURSIVE_PT_BASE + (pd_index * FRAME_SIZE));
+    pt[pt_index] = 0;
+
+    __asm__ volatile("invlpg (%0)" :: "r"(va) : "memory");
 }

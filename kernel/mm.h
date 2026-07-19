@@ -12,4 +12,7 @@ void turn_on_paging(void);
 void init_mm(void);
 void setup_identity_paging(void);
 
+void mm_map_page(uint32_t va, uint32_t pa, uint32_t flags);
+void mm_unmap_page(uint32_t va);
+
 #endif /* MM_H */
