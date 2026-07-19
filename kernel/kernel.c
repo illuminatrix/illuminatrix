@@ -27,4 +27,7 @@ void kernel_main(void)
 
     welcome();
     init_mm();
+
+    uint32_t *bad_pointer = (uint32_t *)0xA0000000;
+    uint32_t test_read = *bad_pointer;
 }
