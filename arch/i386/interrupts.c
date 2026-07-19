@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 #include "idt.h"
 #include "interrupt.h"
 
@@ -90,8 +91,41 @@ void load_idt(void)
     enable_interrupts();
 }
 
+void page_fault_handler(uint32_t error)
+{
+    uint32_t address;
+    __asm__ volatile("mov %%cr2, %0" : "=r"(address));
+
+
+    printf("PAGE FAULT!\n");
+    printf("address: 0x%08x\n", address);
+
+    printf("Error type: %s\n",
+            (error & 0x1)? "Page not Present":
+            "Protection Violation");
+
+    printf("Action: %s\n",
+            (error & 0x2)? "attempted to write data to this address":
+            "attempted to read data to this address");
+
+    printf("Privilege: %s\n",
+            (error & 0x4)? "Caused by User space":
+            "Caused by Kernel space");
+
+    if (error & 8)
+        printf("Detail: Corrupted page table detected\n");
+
+    if (error & 10)
+        printf("Detail: Error trying to fetch CUP instructions\n");
+}
+
 void common_handler_error_code(struct context_w_error context)
 {
+    switch (context.vector) {
+        case 14:
+            page_fault_handler(context.error);
+        break;
+    }
 
 halt: goto halt;
 
