@@ -13,6 +13,8 @@ void init_mm(void);
 void setup_identity_paging(void);
 
 void mm_map_page(uint32_t va, uint32_t pa, uint32_t flags);
+void mm_alloc_at(uint32_t va, uint32_t flags);
+void mm_alloc_region_at(uint32_t va, uint32_t size, uint32_t flags);
 void mm_unmap_page(uint32_t va);
 
 #endif /* MM_H */

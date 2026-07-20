@@ -103,6 +103,23 @@ void mm_map_page(uint32_t va, uint32_t pa, uint32_t flags)
     __asm__ volatile("invlpg (%0)" :: "r"(va) : "memory");
 }
 
+void mm_alloc_at(uint32_t va, uint32_t flags)
+{
+    uint32_t pa = (uint32_t)pmm_frame_alloc();
+    mm_map_page(va & ~0xFFF, pa, flags);
+}
+
+void mm_alloc_region_at(uint32_t va, uint32_t size, uint32_t flags)
+{
+    uint32_t aligned_va = va & ~0xFFF;
+    uint32_t aligned_va_end = (va + size + 0xFFF) & ~0xFFF;
+
+    for (uint32_t current_va = aligned_va; current_va < aligned_va_end; current_va += FRAME_SIZE) {
+        uint32_t pa = (uint32_t)pmm_frame_alloc();
+        mm_map_page(current_va, pa, flags);
+    }
+}
+
 void mm_unmap_page(uint32_t va)
 {
     uint32_t pd_index = va >> 22;
