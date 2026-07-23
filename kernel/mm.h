@@ -2,9 +2,16 @@
 #define MM_H
 
 #include <stdint.h>
+#include "pmm.h"
 
-#define FRAME 0x1000 /* 4k */
+#ifndef FRAME_SIZE
+#error "frame size is not defined"
+#endif
+
 #define PAGE_ENTRY_SIZE 1<<10 /* 0x400 or 1024 entries */
+
+#define PAGE_PRESENT    0x1
+#define PAGE_RW         0x2
 
 typedef struct mmap_entry mmap_entry_t;
 

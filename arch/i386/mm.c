@@ -4,9 +4,6 @@
 #include "pmm.h"
 #include "boot.h"
 
-#define PAGE_PRESENT    0x1
-#define PAGE_RW         0x2
-
 // RECURSIVE_PD_VIRTUAL is the address where pdir was mapped
 #define RECURSIVE_PD_VIRTUAL 0xFFFFF000
 #define RECURSIVE_PT_BASE 0xFFC00000

@@ -5,6 +5,7 @@
 #include "irq.h"
 #include "ker_syscall.h"
 #include "boot.h"
+#include "kmalloc.h"
 
 void welcome()
 {
@@ -27,4 +28,5 @@ void kernel_main(void)
 
     welcome();
     init_mm();
+    heap_init();
 }
