@@ -70,7 +70,6 @@ irq_\irq_no:
 	addl $4, %esp        # discard interrupt vector number
         cli
 	popal
-        addl $8, %esp;
 	iretl
 .endm
 
