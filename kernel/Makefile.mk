@@ -2,7 +2,6 @@ KERNEL_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
 KERNEL_OBJS += $(KERNEL_DIR)ker_syscall.o
 KERNEL_OBJS += $(KERNEL_DIR)kernel.o
-KERNEL_OBJS += $(KERNEL_DIR)pic.o
 KERNEL_OBJS += $(KERNEL_DIR)irq.o
 KERNEL_OBJS += $(KERNEL_DIR)kmalloc.o
 
