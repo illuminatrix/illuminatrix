@@ -121,9 +121,15 @@ void page_fault_handler(uint32_t error)
 
 void common_handler_error_code(struct context_w_error context)
 {
+    printf("CPU Exeption!\n");
+    printf("Exeption: %d\n", context.vector);
+
     switch (context.vector) {
         case 14:
             page_fault_handler(context.error);
+        break;
+        default:
+            printf("Error: %d\n", context.error);
         break;
     }
 
@@ -133,6 +139,9 @@ halt: goto halt;
 
 void common_handler(struct context_no_error context)
 {
+
+    printf("CPU Exeption!\n");
+    printf("Exeption: %d\n", context.vector);
 
 halt: goto halt;
 
