@@ -15,6 +15,7 @@ void welcome()
 
 void print_tick()
 {
+    printf("tick\n");
 }
 
 void kernel_main(void)
