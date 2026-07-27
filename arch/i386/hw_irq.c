@@ -1,5 +1,5 @@
 #include "interrupt.h"
-#include "pic.h"
+#include "hw_irq.h"
 #include "pio.h"
 
 /* PIC Ports */
@@ -32,7 +32,7 @@
 
 #define PIC_EOI 0x20
 
-void pic_init()
+void hw_irq_init()
 {
 
     // ICW1 initialize PICs
@@ -54,7 +54,7 @@ void pic_init()
     enable_interrupts();
 }
 
-void pic_enable_irq(uint8_t irq)
+void hw_irq_enable_irq(uint8_t irq)
 {
     uint16_t mask;
     uint16_t val;
@@ -71,7 +71,7 @@ void pic_enable_irq(uint8_t irq)
     }
 }
 
-void pic_disable_irq(uint8_t irq)
+void hw_irq_disable_irq(uint8_t irq)
 {
     if (irq > 15) return;
 

@@ -4,7 +4,7 @@ ARCH_OBJS += $(ARCH_DIR)isrs.o
 ARCH_OBJS += $(ARCH_DIR)interrupts.o
 ARCH_OBJS += $(ARCH_DIR)mm.o
 ARCH_OBJS += $(ARCH_DIR)pio.o
-ARCH_OBJS += $(ARCH_DIR)pic.o
+ARCH_OBJS += $(ARCH_DIR)hw_irq.o
 
 INCLUDE_DIRS += -I$(ARCH_DIR)
 
