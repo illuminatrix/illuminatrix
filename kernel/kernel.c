@@ -5,6 +5,7 @@
 #include "ker_syscall.h"
 #include "boot.h"
 #include "kmalloc.h"
+#include "pit.h"
 
 void welcome()
 {
@@ -23,9 +24,9 @@ void kernel_main(void)
     irq_init();
     load_idt();
 
-    irq_request(0, print_tick);
-
     welcome();
     init_mm();
     heap_init();
+
+    pit_init(100, print_tick);
 }

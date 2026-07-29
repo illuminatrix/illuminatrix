@@ -5,6 +5,7 @@ ARCH_OBJS += $(ARCH_DIR)interrupts.o
 ARCH_OBJS += $(ARCH_DIR)mm.o
 ARCH_OBJS += $(ARCH_DIR)pio.o
 ARCH_OBJS += $(ARCH_DIR)hw_irq.o
+ARCH_OBJS += $(ARCH_DIR)pit.o
 
 INCLUDE_DIRS += -I$(ARCH_DIR)
 
